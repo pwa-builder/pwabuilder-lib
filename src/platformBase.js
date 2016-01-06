@@ -8,7 +8,7 @@ var	manifestTools = require('./manifestTools'),
     iconTools = require('./iconTools'),
     fileTools = require('./fileTools'),
     packageTools = require('./packageTools'),
-    logger = require('./log');
+    log = require('./log');
 
 function PlatformBase (id, name, packageName, baseDir) {
   var self = this;
@@ -17,7 +17,7 @@ function PlatformBase (id, name, packageName, baseDir) {
   self.name = name;
   self.packageName = packageName;
   self.baseDir = baseDir;
-  self.log = logger.getLogger(id);
+  self.log = log;
 }
 
 /**
@@ -152,35 +152,35 @@ PlatformBase.prototype.createGenerationInfo = function (targetPath, callback) {
  * Outputs a debug message to the log.
  */
 PlatformBase.prototype.debug = function (message, source) {
-  this.log.info(message, source);
+  this.log.info(message, source || self.id);
 };
 
 /**
  * Outputs an informational message to the log.
  */
 PlatformBase.prototype.info = function (message, source) {
-  this.log.info(message, source);
+  this.log.info(message, source || self.id);
 };
 
 /**
  * Outputs a warning message to the log.
  */
 PlatformBase.prototype.warn = function (message, source) {
-  this.log.warn(message, source);
+  this.log.warn(message, source || self.id);
 };
 
 /**
  * Outputs an informational message to the log.
  */
 PlatformBase.prototype.error = function (message, source) {
-  this.log.info(message, source);
+  this.log.info(message, source || self.id);
 };
 
 /**
  * Outputs a stack trace to the log.
  */
 PlatformBase.prototype.trace = function (message, source) {
-  this.log.trace(message, source);
+  this.log.trace(message, source || self.id);
 };
 
 module.exports = PlatformBase;
