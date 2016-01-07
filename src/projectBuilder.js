@@ -80,14 +80,14 @@ var copyDocFile = function (docFilename, targetPath, callback) {
   fileTools.copyFile(source, target, callback);
 };
 
-var copyOfflineFile = function (docFilename, targetPath, callback) {
-  var source = path.join(__dirname, 'manifestTools', 'assets', 'windows10', docFilename);
-  var target = path.join(targetPath, docFilename);
-
-  log.info('Copying offline file "' + docFilename + '" to target: ' + target + '...');
-
-  fileTools.copyFile(source, target, callback);
-};
+// var copyOfflineFile = function (docFilename, targetPath, callback) {
+//   var source = path.join(__dirname, 'manifestTools', 'assets', 'windows10', docFilename);
+//   var target = path.join(targetPath, docFilename);
+// 
+//   log.info('Copying offline file "' + docFilename + '" to target: ' + target + '...');
+// 
+//   fileTools.copyFile(source, target, callback);
+// };
 
 
 var createGenerationInfoFile = function (targetPath, callback) {
@@ -408,17 +408,17 @@ var getCordovaDocFilename = function (platform) {
 //   return task.promise;
 // };
 
-var updateProjectFiles = function (sourceDir, w3cManifestInfo, callback) {
-  var packageManifestPath = path.join(sourceDir, 'package.appxmanifest');
-  fileTools.replaceFileContent(packageManifestPath,
-    function (data) {
-      // TODO: temporarily disable to avoid cyclic reference
-      throw new Error('THIS NEEDS TO BE REVIEWED!!!');
-      // return windows10Utils.replaceManifestValues(w3cManifestInfo, data);
-    },
-    callback);
-};
-
+// var updateProjectFiles = function (sourceDir, w3cManifestInfo, callback) {
+//   var packageManifestPath = path.join(sourceDir, 'package.appxmanifest');
+//   fileTools.replaceFileContent(packageManifestPath,
+//     function (data) {
+//       // TODO: temporarily disable to avoid cyclic reference
+//       throw new Error('THIS NEEDS TO BE REVIEWED!!!');
+//       // return windows10Utils.replaceManifestValues(w3cManifestInfo, data);
+//     },
+//     callback);
+// };
+// 
 // var createWindows10App = function (w3cManifestInfo, generatedAppDir /*, options*/) {
 //   log.info('Generating the Windows 10 application...');
 // 
