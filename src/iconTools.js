@@ -1,8 +1,9 @@
 'use strict';
 
 var path = require('path'),
-    url = require('url'),
-		Q = require('q');
+    url = require('url');
+
+var Q = require('q');
 
 var fileTools = require('./fileTools'),
 		download = require('./download'),
