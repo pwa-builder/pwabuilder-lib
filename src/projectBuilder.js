@@ -60,7 +60,7 @@ var createApps = function (w3cManifestInfo, rootDir, platforms, options, callbac
 			};
 						
 			log.debug('Creating app for platform \'' + platform.name + '\'...');
-			return Q.nfcall(platform.create, w3cManifestInfo, generatedAppDir, options)
+			return Q.ninvoke(platform, 'create', w3cManifestInfo, generatedAppDir, options)
 					.then(function () {
 						log.info(platform.name + ' app is created!');
 					})
@@ -196,7 +196,7 @@ function packageApps (platforms, rootDir, outputPath, options, callback) {
 			};
 						
 			log.debug('Packaging the app for the \'' + platform.name + '\' platform...');
-			return Q.nfcall(platform.package, rootDir, outputPath, options)
+			return Q.ninvoke(platform, 'package', rootDir, outputPath, options)
 					.then(function () {
 						log.info('The ' + platform.name + ' app is packaged!');
 					})
