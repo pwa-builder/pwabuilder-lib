@@ -37,7 +37,7 @@ PlatformBase.prototype.create = function (w3cManifestInfo, rootDir, options, cal
  * Runs the application created using the `create` operation for the given platform.
  */
 PlatformBase.prototype.run = function (callback) {
-  this.warn('WARNING: run operation is not implemented for platform: ' + this.id);
+  this.warn('The \'run\' command is not implemented for platform: ' + this.id);
 };
 
 /**
@@ -46,7 +46,7 @@ PlatformBase.prototype.run = function (callback) {
  * Packages the application created using the `create` operation to be published in the platform's store.
  */
 PlatformBase.prototype.package = function (rootDir, outputPath, options, callback) {
-  this.warn('WARNING: package operation is not implemented for platform: ' + this.id);
+  this.warn('The \'package\' command is not implemented for platform: ' + this.id);
 };
 
 /**
@@ -55,7 +55,7 @@ PlatformBase.prototype.package = function (rootDir, outputPath, options, callbac
  * Opens the source code for the application created using the `create` operation for the given platform.
  */
 PlatformBase.prototype.open = function (callback) {
-  this.warn('WARNING: open operation is not implemented for platform: ' + this.id);
+  this.warn('The \'open\' command is not implemented for platform: ' + this.id);
 };
 
 /**
