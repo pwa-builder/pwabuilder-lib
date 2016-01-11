@@ -32,13 +32,14 @@ Error.prototype.getMessage = function getMessage (logLevel, err) {
   err = err || this;
   if (logLevel <= 1) {
     var message = err.stack ? err.stack.replace(/^Error: /, '') : err.message;
-    if (err.innerError) {
-      message += '\n' + err.getMessage(logLevel, err.innerError);
-    }    
   }
   else {
     message = err.message;
   }
+  
+  if (err.innerError) {
+    message += '\n' + err.getMessage(logLevel, err.innerError);
+  }    
   
   return message;
 };  
