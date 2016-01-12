@@ -45,7 +45,7 @@ PlatformBase.prototype.run = function (callback) {
  * 
  * Packages the application created using the `create` operation to be published in the platform's store.
  */
-PlatformBase.prototype.package = function (rootDir, outputPath, options, callback) {
+PlatformBase.prototype.package = function (rootDir, options, callback) {
   this.warn('The \'package\' command is not implemented for platform: ' + this.id);
 };
 
