@@ -12,11 +12,17 @@ var fileTools = require('./fileTools'),
 		validationConstants = require('./constants').validation;
 
 // TODO: platform windows should also generate windows10
-// TODO: review log levels for validation results
 var createApps = function (w3cManifestInfo, rootDir, platforms, options, callback) {
 
 	var platformModules;
 	
+  // determine the path where the app will be created
+  options.appName = utils.sanitizeName(w3cManifestInfo.content.short_name);
+  var generatedAppDir = path.join(rootDir, options.appName);
+
+  // Add timestamp to manifest information for telemetry purposes only
+  w3cManifestInfo.timestamp = new Date().toISOString().replace(/T/, ' ').replace(/\.[0-9]+/, ' ');
+  
   // enable all registered platforms
   Q.fcall(platformTools.enablePlatforms)
 	// load all platforms specified in the command line
@@ -51,41 +57,33 @@ var createApps = function (w3cManifestInfo, rootDir, platforms, options, callbac
       });    
 	})
   .then(function () {
-    // determine the path where the Cordova app will be created
-    options.appName = utils.sanitizeName(w3cManifestInfo.content.short_name);
-    var generatedAppDir = path.join(rootDir, options.appName);
-
-    // Add timestamp to manifest information for telemetry purposes only
-    w3cManifestInfo.timestamp = new Date().toISOString().replace(/T/, ' ').replace(/\.[0-9]+/, ' ');
-    
     // create app directory
-    return fileTools.mkdirp(generatedAppDir)
-			.thenResolve(generatedAppDir);
+    return fileTools.mkdirp(generatedAppDir);
   })
-	.then(function (generatedAppDir) {
+	.then(function () {
 		// create apps for each platform
 		var tasks = platformModules.map(function (platform) {
-			if (!platform) {
-				return Q.resolve();
+			if (platform) {
+  			return Q.ninvoke(platform, 'create', w3cManifestInfo, generatedAppDir, options);
 			};
 						
-			log.debug('Creating app for platform \'' + platform.name + '\'...');
-			return Q.ninvoke(platform, 'create', w3cManifestInfo, generatedAppDir, options)
-					.then(function () {
-						log.info(platform.name + ' app is created!');
-					})
-					.catch(function (err) {
-						log.error(platform.name + ' app could not be created - '+ err.getMessage());
-					});
+      return Q.resolve();
 		});
 
-		return Q.allSettled(tasks);
+		return Q.allSettled(tasks)
+      .then(function (results) {
+        results.forEach(function (result) {
+          if (result.state !== 'fulfilled') {
+            log.error(result.reason.getMessage());
+          }
+        });
+      });
 	})
 	.catch(function (err) {
-		log.error('Completed with errors - ' + err.getMessage());	
+		log.error('Completed with errors - ' + err.getMessage());
 	})
 	.done(function () {
-		log.info('All done!');
+		log.write('All done!');
 	});
 }
 
