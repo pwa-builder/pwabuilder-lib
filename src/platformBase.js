@@ -183,10 +183,10 @@ PlatformBase.prototype.error = function (message, source) {
 };
 
 /**
- * Outputs a stack trace to the log.
+ * Outputs a message to the log regardless of the configured logging level.
  */
-PlatformBase.prototype.trace = function (message, source) {
-  this.log.trace(message, source || this.id);
+PlatformBase.prototype.write = function (message, source) {
+  this.log.write(message, source || this.id);
 };
 
 module.exports = PlatformBase;
