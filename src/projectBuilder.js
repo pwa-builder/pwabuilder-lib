@@ -21,24 +21,34 @@ var createApps = function (w3cManifestInfo, rootDir, platforms, options, callbac
   Q.fcall(platformTools.enablePlatforms)
 	// load all platforms specified in the command line
 	.then(function () {
-		return platformTools.loadPlatforms(platforms)		
+		return platformTools.loadPlatforms(platforms).then(function (modules) {
+      // save loaded modules
+      return platformModules = modules;
+    })
 	})
 	// validate the manifest
 	.then(function (modules) {
-		platformModules = modules;		
-		return manifestTools.validateManifest(w3cManifestInfo, platformModules, platforms);
-	})
-	// output validation results
-	.then(function (validationResults) {
-		validationResults.forEach(function (result) {			
-      if (result.level === validationConstants.levels.suggestion) {
-        log.info('Manifest validation - ' + result.description + ' (member: ' + result.member + ').', result.platform);        
-      } else if (result.level === validationConstants.levels.warning) {
-        log.warn('Manifest validation - ' + result.description + ' (member: ' + result.member + ').', result.platform);        
-      } else if (result.level === validationConstants.levels.error) {
-        log.error('Manifest validation - ' + result.description + ' (member: ' + result.member + ').', result.platform);        
-      }
-		});
+		return manifestTools.validateManifest(w3cManifestInfo, modules, platforms)
+      .then(function (validationResults) {
+        // output validation results
+        var invalidManifest = false;
+        var maxLenSeverity = 10;
+        validationResults.forEach(function (result) {
+          var severity = result.level.toUpperCase();          
+          var validationMessage = 'Manifest validation ' + severity + Array(Math.max(maxLenSeverity - severity.length + 1, 0)).join(' ') + ' - ' +  result.description + '(member: ' + result.member + ').';
+          if (result.level === validationConstants.levels.suggestion || result.level === validationConstants.levels.warning) {
+            log.warn(validationMessage, result.platform);        
+          } else if (result.level === validationConstants.levels.error) {
+            log.error(validationMessage, result.platform);        
+            invalidManifest = true;
+          }
+        });
+        
+        // report manifest validation errors
+        if (invalidManifest) {
+          return Q.reject(new Error('The manifest is not valid. Review the validation messages above for additional information.'));
+        }
+      });    
 	})
   .then(function () {
     // determine the path where the Cordova app will be created
@@ -186,7 +196,7 @@ function packageApps (platforms, rootDir, outputPath, options, callback) {
   Q.fcall(platformTools.enablePlatforms)
 	// load all platforms specified in the command line
 	.then(function () {
-		return platformTools.loadPlatforms(platforms)		
+		return platformTools.loadPlatforms(platforms);
 	})
 	.then(function (platformModules) {
 		// create apps for each platform
