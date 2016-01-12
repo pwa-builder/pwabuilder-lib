@@ -55,7 +55,7 @@ function exec (command, args, options, callback) {
 
   // capture stdout
   childProcess.stdout.on('data', function (data) {      
-    var text = data.toString()
+    var text = data.toString();
     stdout += text;
         
     if (!options.suppressOutput) {
@@ -66,7 +66,7 @@ function exec (command, args, options, callback) {
 
   // capture stderr
   childProcess.stderr.on('data', function (data) {
-    var text = data.toString()
+    var text = data.toString();
     stderr += text;
     
     if (!options.suppressOutput) {
@@ -94,7 +94,7 @@ function exec (command, args, options, callback) {
     var result = { 'code': code, 'stdout': stdout, 'stderr': stderr };
     
     if (code != 0) {
-      var err = new Error('External process completed with errors [process ID: ' + childProcess.pid + ' - exit code: ' + code + '].');
+      var err = new Error('External process [process ID: ' + childProcess.pid + '] completed with errors. ' + stderr.replace(/\n*$/, ''));
       for (var attrname in result) { err[attrname] = result[attrname]; }
       return deferred.reject(err);
     }
