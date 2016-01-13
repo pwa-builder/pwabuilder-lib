@@ -1,6 +1,4 @@
-var path = require('path'),
-    url = require('url'),
-    fs = require('fs');
+var path = require('path');
 
 var Q = require('q');    
 
