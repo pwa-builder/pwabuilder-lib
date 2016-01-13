@@ -1,4 +1,3 @@
-// from lib/common/fileUtils.js
 'use strict';
 
 var fs = require('fs'),
@@ -8,7 +7,7 @@ var _mkdirp = require('mkdirp'),
     ncp = require('ncp'), 
     Q = require('q');
 
-function copyFile(source, target, callback) {
+function copyFile (source, target, callback) {
 
   var deferred = Q.defer();
 
@@ -31,7 +30,7 @@ function copyFile(source, target, callback) {
   return deferred.promise.nodeify(callback);
 }
 
-function copyFolder(source, target, options, callback) {
+function copyFolder (source, target, options, callback) {
 
   if (arguments.length == 3) {
     if (typeof options === "function") {
@@ -57,7 +56,7 @@ function copyFolder(source, target, options, callback) {
           .nodeify(callback);
 }
 
-function replaceFileContent(source, replacementFunc, callback) {
+function replaceFileContent (source, replacementFunc, callback) {
   return Q.nfcall(fs.readFile, source, 'utf8')
     .then(function (data) {
       var result = replacementFunc(data);
@@ -66,7 +65,7 @@ function replaceFileContent(source, replacementFunc, callback) {
     .nodeify(callback);
 }
 
-function mkdirp(filePath, callback) {
+function mkdirp (filePath, callback) {
   
   // ensure filePath points to a valid drive
   var fullPath = path.resolve(filePath);
@@ -80,9 +79,46 @@ function mkdirp(filePath, callback) {
     .nodeify(callback);
 }
 
-function createShortcut(srcpath, dstpath, callback) {
+function createShortcut (srcpath, dstpath, callback) {
   return Q.nfcall(fs.symlink, srcpath, dstpath, 'junction')
           .nodeify(callback);
+}
+
+function searchFile (dir, fileName, callback) {
+  var results = [];
+  fs.readdir(dir, function (err, list) {
+    if (err) {
+      return callback(err);
+    }
+
+    var pending = list.length;
+    if (!pending) {
+      return callback(null, results);
+    }
+
+    list.forEach(function (file) {
+      file = path.resolve(dir, file);
+      fs.stat(file, function (err, stat) {
+        if (stat && stat.isDirectory()) {
+          searchFile(file, fileName, function (err, res) {
+            results = results.concat(res);
+            if (!--pending){
+              callback(null, results);
+            }
+          });
+        } 
+        else {
+          if (path.basename(file) === fileName) {
+            results.push(file);
+          }
+
+          if (!--pending) {
+            callback(null, results);
+          }
+        }
+      });
+    });
+  });
 }
 
 module.exports = {
@@ -90,5 +126,6 @@ module.exports = {
   copyFolder: copyFolder,
   mkdirp: mkdirp,
   createShortcut: createShortcut,
-  replaceFileContent: replaceFileContent
+  replaceFileContent: replaceFileContent,
+  searchFile: searchFile
 };
