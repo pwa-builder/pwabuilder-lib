@@ -2,7 +2,8 @@
     fs = require('fs'),
     path = require('path');
 
-var log = require('./log'),
+var fileTools = require('./fileTools'), 
+    log = require('./log'),
     utils = require('./utils'),
     validations = require('./validations');
 
@@ -27,7 +28,7 @@ function getWindowsVersion (callback) {
   });
 };
 
-var openVisualStudioFile = function (visualStudioFilePath, callback) {
+function openVisualStudioFile (visualStudioFilePath, callback) {
   log.info('Opening the Visual Studio file "' + visualStudioFilePath + '"...');
   
   var cmdLine = 'start ' + visualStudioFilePath;
@@ -45,7 +46,7 @@ var openVisualStudioFile = function (visualStudioFilePath, callback) {
   });
 };
 
-var openVisualStudio = function (callback) {
+function openVisualStudio (callback) {
   if (!utils.isWindows) {
     return callback(new Error('Visual Studio projects can only be opened in Windows environments.'));
   }
@@ -53,7 +54,7 @@ var openVisualStudio = function (callback) {
   var windowsCordovaSolutionFileName = 'CordovaApp.sln';
   var windows10ProjectFileName = 'App.jsproj';
   
-  searchFile(process.cwd(), windows10ProjectFileName, function (err, results) {
+  fileTools.searchFile(process.cwd(), windows10ProjectFileName, function (err, results) {
     if (err) {
       log.debug(err);
       return callback(new Error('Failed to find the Windows 10 project: "' + windows10ProjectFileName + '"'));
@@ -71,7 +72,7 @@ var openVisualStudio = function (callback) {
         });
       } else {
         // If there is a windows 8.1 solution file, open the windows 8.1 solution
-        searchFile(process.cwd(), windowsCordovaSolutionFileName, function (err, results) {
+        fileTools.searchFile(process.cwd(), windowsCordovaSolutionFileName, function (err, results) {
           if (err) {
             log.debug(err);
             return callback(new Error('Failed to find the Visual Studio solution: "' + windowsCordovaSolutionFileName + '"'));
