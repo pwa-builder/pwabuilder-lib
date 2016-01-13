@@ -94,20 +94,22 @@ var createApps = function (w3cManifestInfo, rootDir, platforms, options, callbac
     .nodeify(callback);
 }
 
-function packageApps (platforms, rootDir, options, callback) {
+function packageApps (platforms, options, callback) {
 
   // validate arguments
-  if (arguments.length < 2) {
+  if (arguments.length < 1) {
     return Q.reject(new Error('One or more required arguments are missing.')).nodeify(callback);
   }
   
-  if (arguments.length == 3) {
+  if (arguments.length == 2) {
     if (typeof options === "function") {
       callback = options;
       options = {};
     }
   }
   
+  var rootDir = process.cwd();
+   
   // enable all registered platforms
   return Q.fcall(platformTools.enablePlatforms).then(function () {
     // load all platforms specified in the command line
