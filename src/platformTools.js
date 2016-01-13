@@ -147,7 +147,7 @@ function updatePlatformConfig(configPath, updateFunction) {
   return fileTools.replaceFileContent(configPath, updateFunction);
 }
 
-function registerPlatform(platformId, packageName, source, configPath, callback) {
+function addPlatform(platformId, packageName, source, configPath, callback) {
   
   if (arguments.length == 4) {
     if (typeof configPath === "function") {
@@ -164,7 +164,7 @@ function registerPlatform(platformId, packageName, source, configPath, callback)
   .nodeify(callback);
 }
 
-function unregisterPlatform(platformId, configPath, callback) {
+function removePlatform(platformId, configPath, callback) {
   
   if (arguments.length == 2) {
     if (typeof configPath === "function") {
@@ -187,6 +187,6 @@ module.exports = {
   loadPlatforms: loadPlatforms,
   getAllPlatforms: getAllPlatforms,
   getPlatform: getPlatform,
-  registerPlatform: registerPlatform,
-  unregisterPlatform: unregisterPlatform
+  addPlatform: addPlatform,
+  removePlatform: removePlatform
 };
