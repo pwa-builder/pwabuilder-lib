@@ -3,7 +3,8 @@
 var path = require('path'),
     Q = require('q');
 
-var packageTools = require('./packageTools'),
+var fileTools = require('./fileTools'), 
+    packageTools = require('./packageTools'),
     CustomError = require('./customError'),
     log = require('./log');
 
@@ -137,10 +138,32 @@ function getPlatform (platformId) {
   return platformInfo.instance;
 }
 
+function registerPlatform(platformId, packageName, source, configPath, callback) {
+  
+  if (arguments.length == 4) {
+    if (typeof configPath === "function") {
+      callback = configPath;
+      configPath = undefined;      
+    }
+  }
+
+  if (!configPath) {
+    configPath = path.resolve(path.dirname(require.main.filename), 'platforms.json');
+  }
+  
+  return fileTools.replaceFileContent(configPath, function (data) {
+      var platforms = JSON.parse(data);
+      platforms[platformId] = { packageName: packageName, source: source };
+      return JSON.stringify(platforms, null, 4); 
+  })
+  .nodeify(callback);
+}
+
 module.exports = {
   enablePlatforms: enablePlatforms,
   loadPlatform: loadPlatform,
   loadPlatforms: loadPlatforms,
   getAllPlatforms: getAllPlatforms,
-  getPlatform: getPlatform
+  getPlatform: getPlatform,
+  registerPlatform: registerPlatform
 };
