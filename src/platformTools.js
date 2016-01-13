@@ -138,6 +138,15 @@ function getPlatform (platformId) {
   return platformInfo.instance;
 }
 
+function updatePlatformConfig(configPath, updateFunction) {
+  
+  if (!configPath) {
+    configPath = path.resolve(path.dirname(require.main.filename), 'platforms.json');
+  }
+  
+  return fileTools.replaceFileContent(configPath, updateFunction);
+}
+
 function registerPlatform(platformId, packageName, source, configPath, callback) {
   
   if (arguments.length == 4) {
@@ -147,13 +156,26 @@ function registerPlatform(platformId, packageName, source, configPath, callback)
     }
   }
 
-  if (!configPath) {
-    configPath = path.resolve(path.dirname(require.main.filename), 'platforms.json');
-  }
-  
-  return fileTools.replaceFileContent(configPath, function (data) {
+  return updatePlatformConfig(configPath, function (data) {
       var platforms = JSON.parse(data);
       platforms[platformId] = { packageName: packageName, source: source };
+      return JSON.stringify(platforms, null, 4); 
+  })
+  .nodeify(callback);
+}
+
+function unregisterPlatform(platformId, configPath, callback) {
+  
+  if (arguments.length == 2) {
+    if (typeof configPath === "function") {
+      callback = configPath;
+      configPath = undefined;      
+    }
+  }
+
+  return updatePlatformConfig(configPath, function (data) {
+      var platforms = JSON.parse(data);
+      delete platforms[platformId];
       return JSON.stringify(platforms, null, 4); 
   })
   .nodeify(callback);
@@ -165,5 +187,6 @@ module.exports = {
   loadPlatforms: loadPlatforms,
   getAllPlatforms: getAllPlatforms,
   getPlatform: getPlatform,
-  registerPlatform: registerPlatform
+  registerPlatform: registerPlatform,
+  unregisterPlatform: unregisterPlatform
 };
