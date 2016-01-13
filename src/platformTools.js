@@ -11,6 +11,10 @@ var fileTools = require('./fileTools'),
 var registeredPlatforms = {};
 var loadedPackages = {};
 
+function getDefaultConfigPath () {
+  return path.resolve(path.dirname(require.main.filename), 'platforms.json');
+}
+
 function getPlatformModule(packageName, source) {
   
   if (!packageName) {
@@ -106,7 +110,8 @@ function loadPlatforms(platforms, callback) {
 
 function enablePlatforms(platformConfig) {
   if (!platformConfig) {
-    var configPath = path.resolve(path.dirname(require.main.filename), 'platforms.json');
+    var configPath = getDefaultConfigPath();
+    
     try {
       platformConfig = require(configPath);
     }
@@ -115,7 +120,7 @@ function enablePlatforms(platformConfig) {
     }    
   }
   
-  registeredPlatforms = platformConfig;      
+  registeredPlatforms = platformConfig;
 }
 
 function getAllPlatforms () {
@@ -138,13 +143,8 @@ function getPlatform (platformId) {
   return platformInfo.instance;
 }
 
-function updatePlatformConfig(configPath, updateFunction) {
-  
-  if (!configPath) {
-    configPath = path.resolve(path.dirname(require.main.filename), 'platforms.json');
-  }
-  
-  return fileTools.replaceFileContent(configPath, updateFunction);
+function updatePlatformConfig (configPath, updateFunction) {
+  return fileTools.replaceFileContent(configPath || getDefaultConfigPath(), updateFunction);
 }
 
 function addPlatform(platformId, packageName, source, configPath, callback) {
@@ -181,6 +181,22 @@ function removePlatform(platformId, configPath, callback) {
   .nodeify(callback);
 }
 
+function listPlatforms(configPath, callback) {
+  
+  if (arguments.length == 1) {
+    if (typeof configPath === "function") {
+      callback = configPath;
+      configPath = undefined;      
+    }
+  }
+  
+  return fileTools.readFile(configPath || getDefaultConfigPath()).then(function (data) {
+      var platforms = JSON.parse(data);
+      return Object.keys(platforms);
+  })
+  .nodeify(callback);
+}
+
 module.exports = {
   enablePlatforms: enablePlatforms,
   loadPlatform: loadPlatform,
@@ -188,5 +204,6 @@ module.exports = {
   getAllPlatforms: getAllPlatforms,
   getPlatform: getPlatform,
   addPlatform: addPlatform,
-  removePlatform: removePlatform
+  removePlatform: removePlatform,
+  listPlatforms: listPlatforms
 };
