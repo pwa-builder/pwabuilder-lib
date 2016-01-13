@@ -7,6 +7,11 @@ var _mkdirp = require('mkdirp'),
     ncp = require('ncp'), 
     Q = require('q');
 
+function readFile (source, callback) {
+  return Q.nfcall(fs.readFile, source, 'utf8')
+          .nodeify(callback);
+}
+
 function copyFile (source, target, callback) {
 
   var deferred = Q.defer();
@@ -122,6 +127,7 @@ function searchFile (dir, fileName, callback) {
 }
 
 module.exports = {
+  readFile: readFile,
   copyFile: copyFile,
   copyFolder: copyFolder,
   mkdirp: mkdirp,
