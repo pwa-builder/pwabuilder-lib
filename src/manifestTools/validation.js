@@ -14,7 +14,7 @@ function loadValidationRules(validationRulesDir, platforms, callback) {
   var stat = Q.nfbind(fs.stat); 
 
   // list contents of the validation rules folder
-  return Q.nfbind(fs.readdir)(validationRulesDir)
+  return Q.nfcall(fs.readdir, validationRulesDir)
     .then(function (files) {
       return Q.allSettled(files.map(function (file) {
         var filePath = path.join(validationRulesDir, file);
