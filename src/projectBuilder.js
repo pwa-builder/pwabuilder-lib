@@ -131,7 +131,38 @@ function packageApps (platforms, options, callback) {
   .nodeify(callback);
 }
 
+function runApp (platformId, options, callback) {
+  // validate arguments
+  if (arguments.length < 1) {
+    return Q.reject(new Error('One or more required arguments are missing.')).nodeify(callback);
+  }
+  
+  if (arguments.length == 2) {
+    if (typeof options === "function") {
+      callback = options;
+      options = {};
+    }
+  }
+    
+  // enable all registered platforms
+  return Q.fcall(platformTools.enablePlatforms).then(function () {
+    // load all platforms specified in the command line
+    return platformTools.loadPlatforms([platformId]);
+  })
+  .then(function (platformModules) {
+    // package apps for each platform
+    if (platformModules && platformModules.length > 0) {
+      var platform = platformModules[0];    
+      return Q.ninvoke(platform, 'run', options);
+    }
+
+    return Q.resolve();
+  })
+  .nodeify(callback);  
+}
+
 module.exports = {
   createApps: createApps,
-  packageApps: packageApps
+  packageApps: packageApps,
+  runApp: runApp
 };
