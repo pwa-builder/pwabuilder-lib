@@ -26,9 +26,8 @@ function PlatformBase (id, name, packageName, baseDir) {
  * Creates a fully-functional hosted web application application for the given platform.
  */
 PlatformBase.prototype.create = function (w3cManifestInfo, rootDir, options, callback) {
-  // TODO: consider halting the operation if create is not overridden
-  // throw new Error('create operation must be implemented in the platform implementation.');
-  this.error('ERROR: create operation is not implemented for platform: ' + this.id);
+  return Q.reject(new Error('The \'create\' operation is not implemented for platform: ' + this.id))
+          .nodeify(callback);
 };
 
 /**
@@ -38,6 +37,7 @@ PlatformBase.prototype.create = function (w3cManifestInfo, rootDir, options, cal
  */
 PlatformBase.prototype.run = function (callback) {
   this.warn('The \'run\' command is not implemented for platform: ' + this.id);
+  return Q.resolve().nodeify(callback);
 };
 
 /**
@@ -47,6 +47,7 @@ PlatformBase.prototype.run = function (callback) {
  */
 PlatformBase.prototype.package = function (rootDir, options, callback) {
   this.warn('The \'package\' command is not implemented for platform: ' + this.id);
+  return Q.resolve().nodeify(callback);
 };
 
 /**
@@ -56,6 +57,7 @@ PlatformBase.prototype.package = function (rootDir, options, callback) {
  */
 PlatformBase.prototype.open = function (callback) {
   this.warn('The \'open\' command is not implemented for platform: ' + this.id);
+  return Q.resolve().nodeify(callback);
 };
 
 /**
