@@ -35,7 +35,7 @@ PlatformBase.prototype.create = function (w3cManifestInfo, rootDir, options, cal
  * 
  * Runs the application created using the `create` operation for the given platform.
  */
-PlatformBase.prototype.run = function (callback) {
+PlatformBase.prototype.run = function (options, callback) {
   this.warn('The \'run\' command is not implemented for platform: ' + this.id);
   return Q.resolve().nodeify(callback);
 };
@@ -55,7 +55,7 @@ PlatformBase.prototype.package = function (rootDir, options, callback) {
  * 
  * Opens the source code for the application created using the `create` operation for the given platform.
  */
-PlatformBase.prototype.open = function (callback) {
+PlatformBase.prototype.open = function (options, callback) {
   this.warn('The \'open\' command is not implemented for platform: ' + this.id);
   return Q.resolve().nodeify(callback);
 };
