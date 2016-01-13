@@ -12,6 +12,18 @@ var fileTools = require('./fileTools'),
 // TODO: platform windows should also generate windows10
 var createApps = function (w3cManifestInfo, rootDir, platforms, options, callback) {
 
+  // validate arguments
+  if (arguments.length < 3) {
+    return Q.reject(new Error('One or more required arguments are missing.')).nodeify(callback);
+  }
+  
+  if (arguments.length == 4) {
+    if (typeof options === "function") {
+      callback = options;
+      options = {};      
+    }
+  }
+  
 	var platformModules;
 	
   // determine the path where the app will be created
@@ -87,6 +99,18 @@ var createApps = function (w3cManifestInfo, rootDir, platforms, options, callbac
 
 function packageApps (platforms, rootDir, options, callback) {
 
+  // validate arguments
+  if (arguments.length < 3) {
+    return Q.reject(new Error('One or more required arguments are missing.')).nodeify(callback);
+  }
+  
+  if (arguments.length == 3) {
+    if (typeof options === "function") {
+      callback = options;
+      options = {};      
+    }
+  }
+  
   // enable all registered platforms
   return Q.fcall(platformTools.enablePlatforms)
     // load all platforms specified in the command line
