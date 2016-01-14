@@ -3,8 +3,6 @@
 var c = require('../../constants'),
     fs = require('fs'),
     path = require('path');
-    // TODO: temporarily removed to avoid cyclic reference
-    // windows10Utils = require('manifoldjs-windows10').windows10Utils;
 
 var validIconFormats = [
   'png',

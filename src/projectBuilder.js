@@ -19,7 +19,6 @@ function processPlatformTasks(tasks) {
   });
 }
 
-// TODO: platform windows should also generate windows10
 var createApps = function (w3cManifestInfo, rootDir, platforms, options, callback) {
 
   // validate arguments
