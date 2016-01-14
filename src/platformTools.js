@@ -1,6 +1,7 @@
 'use strict';
 
-var path = require('path'),
+var fs = require('fs'),
+    path = require('path'),
     Q = require('q');
 
 var fileTools = require('./fileTools'), 
@@ -197,6 +198,13 @@ function listPlatforms(configPath, callback) {
   .nodeify(callback);
 }
 
+function listPlatformsSync(configPath, callback) {
+  
+  var data = fs.readFileSync(configPath || getDefaultConfigPath(), 'utf8'); 
+  var platforms = JSON.parse(data);
+  return Object.keys(platforms);
+}
+
 module.exports = {
   enablePlatforms: enablePlatforms,
   loadPlatform: loadPlatform,
@@ -205,5 +213,6 @@ module.exports = {
   getPlatform: getPlatform,
   addPlatform: addPlatform,
   removePlatform: removePlatform,
-  listPlatforms: listPlatforms
+  listPlatforms: listPlatforms,
+  listPlatformsSync: listPlatformsSync
 };

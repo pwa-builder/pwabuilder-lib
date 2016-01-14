@@ -1,7 +1,9 @@
 ﻿'use strict';
 
+var platformTools = require('./platformTools');
+
 function platformsValid(platforms) {
-  var availablePlatforms = ['windows', 'windows10', 'ios', 'android', 'chrome', 'web', 'firefox'];
+  var availablePlatforms = platformTools.listPlatformsSync();
 
   for (var i = 0; i < platforms.length; i++) {
     if (availablePlatforms.indexOf(platforms[i].toLowerCase()) < 0) {
@@ -13,9 +15,9 @@ function platformsValid(platforms) {
 }
 
 function platformToRunValid(platform) {
-  var platfrormsToRun = ['windows', 'android'];
+  var platformsToRun = ['windows', 'android'];
 
-  if (!platform || platfrormsToRun.indexOf(platform.toLowerCase()) < 0) {
+  if (!platform || platformsToRun.indexOf(platform.toLowerCase()) < 0) {
     return false;
   }
 
