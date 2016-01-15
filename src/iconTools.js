@@ -1,7 +1,6 @@
 'use strict';
 
-var path = require('path'),
-    url = require('url');
+var path = require('path');
 
 var Q = require('q');
 
@@ -24,7 +23,7 @@ function getIcon(iconUrl, iconFilePath, callback) {
           }
           
 					return iconFilePath;
-				})
+				});
 		})
 		.nodeify(callback);
 }

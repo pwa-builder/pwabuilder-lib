@@ -37,8 +37,8 @@ function copyFile (source, target, callback) {
 
 function copyFolder (source, target, options, callback) {
 
-  if (arguments.length == 3) {
-    if (typeof options === "function") {
+  if (arguments.length === 3) {
+    if (typeof options === 'function') {
       callback = options;
       options = {};      
     }

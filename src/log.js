@@ -17,21 +17,21 @@ if (!log) {
     var rawMethod = originalFactory(methodName, logLevel, loggerName);
     
     return function (message, source, severity) {
-      message = message.replace(/\n/g, '\n' + Array(maxLenSeverity + maxLenSource + 6).join(' '));
+      message = message.replace(/\n/g, '\n' + new Array(maxLenSeverity + maxLenSource + 6).join(' '));
       
       if (methodName !== 'write') {
         source = source || loggerName || app.name;      
         severity = severity || methodName;
         rawMethod(
-          '[' + severity + Array(Math.max(maxLenSeverity - severity.length + 1, 0)).join(' ') + '] '
-          + source + Array(Math.max(maxLenSource - source.length + 1, 0)).join(' ') + ': '
-          + message);        
+          '[' + severity + new Array(Math.max(maxLenSeverity - severity.length + 1, 0)).join(' ') + '] ' +
+          source + new Array(Math.max(maxLenSource - source.length + 1, 0)).join(' ') + ': ' +
+          message);        
       }
       else {
         rawMethod(message);
       } 
     };
-  }
+  };
   
   log.write = log.methodFactory('write', log.levels.INFO, '');
   

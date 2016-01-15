@@ -59,7 +59,7 @@ function download (inputUri, outputFilePath, callback) {
     if ([301, 302].indexOf(res.statusCode) > -1) {
       return download(res.headers.location, outputFilePath)
         .then(function (result) { deferred.resolve(result); })
-        .catch(function (err) { deferred.reject(err); })
+        .catch(function (err) { deferred.reject(err); });
     }
     
     // If not OK or Not Modified, throw error
@@ -94,7 +94,7 @@ function download (inputUri, outputFilePath, callback) {
     return deferred.reject(err);
   });
 
-  return deferred.promise.nodeify(callback)
-};
+  return deferred.promise.nodeify(callback);
+}
 
 module.exports = download;

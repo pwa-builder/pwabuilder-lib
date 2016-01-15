@@ -4,8 +4,7 @@ var path = require('path'),
     fs = require('fs'),
     Q = require('q');
 
-var constants = require('../constants'),
-    log = require('../log');
+var constants = require('../constants');
 
 var toStringFunction = Object.prototype.toString;
 
@@ -37,7 +36,7 @@ function loadValidationRules(validationRulesDir, platforms, callback) {
           catch (err) {
             return Q.reject(new Error('Failed to load validation rule from file: \'' + file + '\'. ' + err.message + '.'));
           }
-        })
+        });
       })).then (function (results) {
         // verify the results and consolidate the loaded rules  
         return results.reduce(function (validationRules, result) {
@@ -120,7 +119,7 @@ function validateManifest(w3cManifestInfo, platformModules, platforms, callback)
           return runValidationRules(w3cManifestInfo, rules).then(function (results) {
             allResults.push.apply(allResults, results);
           });
-        })
+        });
       });
 
       return Q.allSettled(platformTasks);

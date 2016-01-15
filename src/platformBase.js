@@ -111,7 +111,7 @@ PlatformBase.prototype.copyDefaultPlatformIcon = function (manifestInfo, iconSiz
 PlatformBase.prototype.copyDocumentation = function (targetPath, platform, callback) {
 
   if (arguments.length > 1) {
-    if (typeof platform === "function") {
+    if (typeof platform === 'function') {
       callback = platform;
       platform = '';
     }

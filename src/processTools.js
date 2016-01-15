@@ -35,7 +35,7 @@ function exec (command, args, options, callback) {
   var bufferedStdout  = '';
   var bufferedStderr  = '';
   
-  if (arguments.length == 2) {
+  if (arguments.length === 2) {
     if (Array.isArray(args)) {
       options = {};
     } else {
@@ -93,7 +93,7 @@ function exec (command, args, options, callback) {
     
     var result = { 'code': code, 'stdout': stdout, 'stderr': stderr };
     
-    if (code != 0) {
+    if (code !== 0) {
       var err = new Error('External process [process ID: ' + childProcess.pid + '] completed with errors. ' + stderr.replace(/\n*$/, ''));
       for (var attrname in result) { err[attrname] = result[attrname]; }
       return deferred.reject(err);
@@ -103,7 +103,7 @@ function exec (command, args, options, callback) {
   });
   
   return deferred.promise.nodeify(callback);
-};
+}
 
 function getCommandPath(currentPath, command) {
   if (!currentPath) {

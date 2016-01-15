@@ -9,7 +9,7 @@ var fileTools = require('./fileTools'),
     utils = require('./utils'),
 		validationConstants = require('./constants').validation;
 
-function processPlatformTasks(tasks) {
+function processPlatformTasks (tasks) {
   return Q.allSettled(tasks).then(function (results) {
     results.forEach(function (result) {
       if (result.state !== 'fulfilled') {
@@ -19,15 +19,15 @@ function processPlatformTasks(tasks) {
   });
 }
 
-var createApps = function (w3cManifestInfo, rootDir, platforms, options, callback) {
+function createApps (w3cManifestInfo, rootDir, platforms, options, callback) {
 
   // validate arguments
   if (arguments.length < 3) {
     return Q.reject(new Error('One or more required arguments are missing.')).nodeify(callback);
   }
   
-  if (arguments.length == 4) {
-    if (typeof options === "function") {
+  if (arguments.length === 4) {
+    if (typeof options === 'function') {
       callback = options;
       options = {};      
     }
@@ -48,7 +48,7 @@ var createApps = function (w3cManifestInfo, rootDir, platforms, options, callbac
       return platformTools.loadPlatforms(platforms).then(function (modules) {
         // save loaded modules
         return platformModules = modules;
-      })
+      });
     })
     // validate the manifest
     .then(function (modules) {
@@ -58,7 +58,7 @@ var createApps = function (w3cManifestInfo, rootDir, platforms, options, callbac
         var maxLenSeverity = 10;
         validationResults.forEach(function (result) {
           var severity = result.level.toUpperCase();          
-          var validationMessage = 'Manifest validation ' + severity + Array(Math.max(maxLenSeverity - severity.length + 1, 0)).join(' ') + ' - ' +  result.description + '(member: ' + result.member + ').';
+          var validationMessage = 'Manifest validation ' + severity + new Array(Math.max(maxLenSeverity - severity.length + 1, 0)).join(' ') + ' - ' +  result.description + '(member: ' + result.member + ').';
           if (result.level === validationConstants.levels.suggestion || result.level === validationConstants.levels.warning) {
             log.warn(validationMessage, result.platform);        
           } else if (result.level === validationConstants.levels.error) {
@@ -83,7 +83,7 @@ var createApps = function (w3cManifestInfo, rootDir, platforms, options, callbac
         if (platform) {
           log.debug('Creating the app for the \'' + platform.name + '\' platform...');
           return Q.ninvoke(platform, 'create', w3cManifestInfo, generatedAppDir, options);
-        };
+        }
               
         return Q.resolve();
       });
@@ -100,8 +100,8 @@ function packageApps (platforms, rootDir, options, callback) {
     return Q.reject(new Error('One or more required arguments are missing.')).nodeify(callback);
   }
   
-  if (arguments.length == 3) {
-    if (typeof options === "function") {
+  if (arguments.length === 3) {
+    if (typeof options === 'function') {
       callback = options;
       options = {};
     }
@@ -134,8 +134,8 @@ function runApp (platformId, options, callback) {
     return Q.reject(new Error('One or more required arguments are missing.')).nodeify(callback);
   }
   
-  if (arguments.length == 2) {
-    if (typeof options === "function") {
+  if (arguments.length === 2) {
+    if (typeof options === 'function') {
       callback = options;
       options = {};
     }

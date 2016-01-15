@@ -1,15 +1,12 @@
-﻿var exec = require('child_process').exec,
-    fs = require('fs'),
-    path = require('path');
+﻿var exec = require('child_process').exec;
 
 var fileTools = require('./fileTools'), 
     log = require('./log'),
-    utils = require('./utils'),
-    validations = require('./validations');
+    utils = require('./utils');
 
-var isWindows10Version = function (version) {
+function isWindows10Version (version) {
   return /^10/.test(version);
-};
+}
 
 function getWindowsVersion (callback) {
   log.info('Obtaining Windows version...');
@@ -26,7 +23,7 @@ function getWindowsVersion (callback) {
 
     callback(undefined, stdout.trim());
   });
-};
+}
 
 function openVisualStudioFile (visualStudioFilePath, callback) {
   log.info('Opening the Visual Studio file "' + visualStudioFilePath + '"...');
@@ -44,7 +41,7 @@ function openVisualStudioFile (visualStudioFilePath, callback) {
     
     callback();
   });
-};
+}
 
 function openVisualStudio (callback) {
   if (!utils.isWindows) {
@@ -89,7 +86,7 @@ function openVisualStudio (callback) {
       }
     });
   });
-};
+}
 
 module.exports = {
   openVisualStudio: openVisualStudio,

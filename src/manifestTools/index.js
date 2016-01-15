@@ -1,7 +1,7 @@
 'use strict';
 
-var loader = require('./loader')
-var validation = require('./validation');
+var loader = require('./loader'),
+    validation = require('./validation');
 
 module.exports = {
   getManifestFromSite: loader.getManifestFromSite,

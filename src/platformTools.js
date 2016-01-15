@@ -10,7 +10,6 @@ var fileTools = require('./fileTools'),
     log = require('./log');
 
 var registeredPlatforms = {};
-var loadedPackages = {};
 
 function getDefaultConfigPath () {
   return path.resolve(path.dirname(require.main.filename), 'platforms.json');
@@ -134,11 +133,11 @@ function getAllPlatforms () {
 function getPlatform (platformId) {
   var platformInfo = registeredPlatforms[platformId];
   if (!platformInfo) {
-    throw new Error('The requested platform \'' + platformId + '\' was not found.')
+    throw new Error('The requested platform \'' + platformId + '\' was not found.');
   }
   
   if (!platformInfo.instance) {
-    throw new Error('The requested platform \'' + platformId + '\' was not loaded.')
+    throw new Error('The requested platform \'' + platformId + '\' was not loaded.');
   }
   
   return platformInfo.instance;
@@ -150,8 +149,8 @@ function updatePlatformConfig (configPath, updateFunction) {
 
 function addPlatform(platformId, packageName, source, configPath, callback) {
   
-  if (arguments.length == 4) {
-    if (typeof configPath === "function") {
+  if (arguments.length === 4) {
+    if (typeof configPath === 'function') {
       callback = configPath;
       configPath = undefined;      
     }
@@ -167,8 +166,8 @@ function addPlatform(platformId, packageName, source, configPath, callback) {
 
 function removePlatform(platformId, configPath, callback) {
   
-  if (arguments.length == 2) {
-    if (typeof configPath === "function") {
+  if (arguments.length === 2) {
+    if (typeof configPath === 'function') {
       callback = configPath;
       configPath = undefined;      
     }
@@ -184,8 +183,8 @@ function removePlatform(platformId, configPath, callback) {
 
 function listPlatforms(configPath, callback) {
   
-  if (arguments.length == 1) {
-    if (typeof configPath === "function") {
+  if (arguments.length === 1) {
+    if (typeof configPath === 'function') {
       callback = configPath;
       configPath = undefined;      
     }
@@ -198,7 +197,7 @@ function listPlatforms(configPath, callback) {
   .nodeify(callback);
 }
 
-function listPlatformsSync(configPath, callback) {
+function listPlatformsSync(configPath) {
   
   var data = fs.readFileSync(configPath || getDefaultConfigPath(), 'utf8'); 
   var platforms = JSON.parse(data);

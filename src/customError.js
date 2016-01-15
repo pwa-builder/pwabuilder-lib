@@ -7,10 +7,10 @@ try {
   log = require('./log');
 } catch (error) {
   // if log is not available, assume 'info' trace level  
-  log = { getLevel: function() { return 2; }}
+  log = { getLevel: function() { return 2; }};
 }
 
-var traceLevels = { "TRACE": 0, "DEBUG": 1, "INFO": 2, "WARN": 3, "ERROR": 4, "SILENT": 5};
+var traceLevels = { 'TRACE': 0, 'DEBUG': 1, 'INFO': 2, 'WARN': 3, 'ERROR': 4, 'SILENT': 5};
 
 // When log level is (0 || 'debug'), return error message + stack trace 
 // for current error as well as any "inner errors". Otherwise, return
@@ -21,17 +21,18 @@ Error.prototype.getMessage = function getMessage (logLevel, err) {
     logLevel = log.getLevel();
   }
   
-  if (typeof logLevel === "string") {
+  if (typeof logLevel === 'string') {
     logLevel = traceLevels[logLevel.toUpperCase()] || traceLevels['DEBUG'];  
   }
   
-  if (typeof logLevel === "number" && (logLevel < 0 || logLevel > traceLevels.SILENT)) {
+  if (typeof logLevel === 'number' && (logLevel < 0 || logLevel > traceLevels.SILENT)) {
     logLevel = traceLevels['DEBUG'];
   }
   
   err = err || this;
+  var message;
   if (logLevel <= 1) {
-    var message = err.stack ? err.stack.replace(/^Error: /, '') : err.message;
+    message = err.stack ? err.stack.replace(/^Error: /, '') : err.message;
   }
   else {
     message = err.message;
@@ -70,7 +71,7 @@ function CustomError(message, innerError) {
   });
   
   Error.captureStackTrace(this, CustomError);
-};
+}
 
 util.inherits(CustomError, Error);
 

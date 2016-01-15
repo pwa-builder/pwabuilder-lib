@@ -105,7 +105,7 @@ function queuePackageInstallation(packageName, source, callback) {
 // Triggers the installation of all queued packages.
 function installQueuedPackages() {
 
-  if (installQueue.length == 0) {
+  if (installQueue.length === 0) {
     return;
   }
 
