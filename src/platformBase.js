@@ -73,16 +73,15 @@ PlatformBase.prototype.getValidationRules = function (platforms, callback) {
   }
   
   var validationRulesDir = path.join(this.baseDir, 'validationRules');
-  return Q.nfcall(fs.stat, validationRulesDir)
-          .then(function (stats) {
-            if (stats.isDirectory()) {
-              return manifestTools.loadValidationRules(validationRulesDir, platforms);
-            }
-                      
-            this.warn('Failed to retrieve the validation rules for platform: ' + this.id + '. The validation rules folder is missing or invalid.');
-            return Q.resolve([]).nodeify(callback);
-          })
-          .nodeify(callback);
+  return Q.nfcall(fs.stat, validationRulesDir).then(function (stats) {
+    if (stats.isDirectory()) {
+      return manifestTools.loadValidationRules(validationRulesDir, platforms);
+    }
+              
+    this.warn('Failed to retrieve the validation rules for platform: ' + this.id + '. The validation rules folder is missing or invalid.');
+    return Q.resolve([]).nodeify(callback);
+  })
+  .nodeify(callback);
 };
     
 /**
@@ -121,12 +120,11 @@ PlatformBase.prototype.copyDocumentation = function (targetPath, platform, callb
 
   this.info('Copying documentation from \'' + sourcePath + '\' to \'' + targetPath + '\'...');
 
-  return fileTools.copyFolder(sourcePath, targetPath)
-    .catch (function (err) {
-      // failure to copy the documentation is not considered fatal, so catch the error and log as a warning
-      this.warn('Failed to copy the documentation for the \'' + platform + '\' Cordova platform. ' + err.getMessage());
-    })
-    .nodeify(callback);
+  return fileTools.copyFolder(sourcePath, targetPath).catch (function (err) {
+    // failure to copy the documentation is not considered fatal, so catch the error and log as a warning
+    this.warn('Failed to copy the documentation for the \'' + platform + '\' Cordova platform. ' + err.getMessage());
+  })
+  .nodeify(callback);
 };
 
 PlatformBase.prototype.createGenerationInfo = function (targetPath, callback) {
