@@ -14,11 +14,11 @@ function ProgressIndicator (message, updateFrequency, stream) {
   self.index = 0;
   
   if (!self.stream.clearLine) {
-    self.stream.clearLine = function () { self.stream.write('\b'); }
+    self.stream.clearLine = function () { self.stream.write('\b'); };
   }
    
   if (!self.stream.moveCursor) {
-    self.stream.moveCursor = function () { }
+    self.stream.moveCursor = function () { };
   } 
   
   self.start = function start () {
@@ -29,7 +29,7 @@ function ProgressIndicator (message, updateFrequency, stream) {
       self.stream.moveCursor(-1);
       self.stream.write(self.indicator[self.index]);
     }, self.updateFrequency);
-  }
+  };
   
   self.reset = function reset () {
     if (self.timer) {
@@ -38,7 +38,7 @@ function ProgressIndicator (message, updateFrequency, stream) {
     
     self.stream.moveCursor(-self.message.length - 2);
     self.stream.clearLine(1);
-  } 
+  };
 }
 
 module.exports = ProgressIndicator;
