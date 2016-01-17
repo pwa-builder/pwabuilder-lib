@@ -5,8 +5,11 @@ var child_process = require('child_process'),
     path = require('path'),
     Q = require('q');
 
-var log = require('./log');
-var stat = Q.nfbind(fs.stat);   
+var log = require('./log'),
+    ProgressIndicator = require('./progress');
+
+var progress = new ProgressIndicator();  
+
 var node_modules = 'node_modules';
 
 function writeOutput(text, bufferedOutput, source, title) {
@@ -50,6 +53,9 @@ function exec (command, args, options, callback) {
   // spawn new process
   var childProcess = child_process.spawn(command, args, options);
 
+  // show progress
+  progress.start();  
+  
   // console log source displays the process ID 
   var source = 'pid:' + childProcess.pid;
 
@@ -59,8 +65,10 @@ function exec (command, args, options, callback) {
     stdout += text;
         
     if (!options.suppressOutput) {
+      progress.reset();
       bufferedStdout = writeOutput(text, bufferedStdout, source, title);
       title = '';
+      progress.start();
     }    
   });
 
@@ -70,18 +78,23 @@ function exec (command, args, options, callback) {
     stderr += text;
     
     if (!options.suppressOutput) {
+      progress.reset();
       bufferedStderr = writeOutput(text, bufferedStderr, source, title);
       title = '';
+      progress.start();
     }
   });
   
   // handle errors
   childProcess.on('error', function (err) {
+    progress.reset();
     return deferred.reject(err);
   });
     
   // process has exited
   childProcess.on('exit', function (code) {
+    progress.reset();
+
     // write pending output to console
     if (bufferedStdout) {
       writeOutput(bufferedStdout);
@@ -111,7 +124,7 @@ function getCommandPath(currentPath, command) {
   }
   
   var testPath = path.join(currentPath, 'node_modules', '.bin', command);
-  return stat(testPath).then(function (fileInfo) {
+  return Q.nfcall(fs.stat, testPath).then(function (fileInfo) {
     if (fileInfo.isFile()) {
       return Q.resolve(testPath);
     }
