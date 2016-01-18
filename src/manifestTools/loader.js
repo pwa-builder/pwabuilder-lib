@@ -9,7 +9,7 @@ var fs = require('fs'),
     manifestTypeDetector = require('./manifestTypeDetector'),
     c = require('../constants'),
     log = require('../log'),
-    chromeToW3c = require('./chromeToW3c.js'),
+    chromeToW3c = require('./platformUtils/chromeToW3c.js'),
     Q = require('q'),
     // Request settings taken from https://github.com/InternetExplorer/modern.IE-static-code-scan/blob/master/app.js
     request = request.defaults({
