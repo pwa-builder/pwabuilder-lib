@@ -1,7 +1,7 @@
 'use strict';
 
-var validation = require('../../../../lib/manifestTools/validationRules/all/absoluteStartUrlRequired');
-var validationConstants = require('../../../../lib/manifestTools/validationConstants');
+var validation = require('../../../lib/manifestTools/validationRules/absoluteStartUrlRequired');
+var validationConstants = require('../../../lib/constants').validation;
 var should = require('should');
 
 describe('Validation - All', function () {
