@@ -31,7 +31,7 @@ describe('Transformations', function () {
       for (var transformation in transformations) {
         /*jshint -W030 */
         transformations[transformation].should.have.property('convertToBase').and.be.a.Function;
-        transformations[transformation].should.have.property('convertFromBase').and.be.a.Function;
+        // transformations[transformation].should.have.property('convertFromBase').and.be.a.Function;
         transformations[transformation].should.have.property('matchFormat').and.be.a.Function;
       }
     });

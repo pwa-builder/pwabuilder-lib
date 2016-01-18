@@ -7,7 +7,8 @@ var fs = require('fs'),
 
 var should = require('should');
 
-var tools = require('../lib/manifestTools'),
+var manifestTools = require('../lib/manifestTools'),
+    platformTools = require('../lib/platformTools'),
     validationConstants = require('../lib/constants').validation;
     
 var manifestTypeDetector = require('../lib/manifestTools/manifestTypeDetector');
@@ -39,17 +40,24 @@ var outputFiles = {
   validManifestPath: path.join(assetsDirectory, 'output-manifest.json')
 };
 
+var platformConfig = {
+    'test': {
+        'packageName': path.join(__dirname, 'assets', 'test-platform'),
+        'source': 'not used'
+    }
+};
+    
 describe('Manifest Tools', function () {
   describe('getManifestFromFile()', function () {
     it('Should return an Error if path is invalid', function (done) {
-      tools.getManifestFromFile(inputFiles.notExistingFile, function (err){
+      manifestTools.getManifestFromFile(inputFiles.notExistingFile, function (err){
         should.exist(err);
         done();
       });
     });
 
     it('Should return an Error if JSON format is invalid', function (done) {
-      tools.getManifestFromFile(inputFiles.invalidManifest, function (err){
+      manifestTools.getManifestFromFile(inputFiles.invalidManifest, function (err){
         should.exist(err);
         err.should.have.property('message', 'Invalid manifest format.');
         done();
@@ -57,7 +65,7 @@ describe('Manifest Tools', function () {
     });
 
     it('Should return an Error if manifest format is invalid', function (done) {
-      tools.getManifestFromFile(inputFiles.invalidManifestFormat, function (err){
+      manifestTools.getManifestFromFile(inputFiles.invalidManifestFormat, function (err){
         should.exist(err);
         err.should.have.property('message', 'Invalid manifest format.');
         done();
@@ -65,7 +73,7 @@ describe('Manifest Tools', function () {
     });
 
     it('Should return a manifest object if input manifest is valid', function (done) {
-      tools.getManifestFromFile(inputFiles.validManifest, function(err, manifestInfo){
+      manifestTools.getManifestFromFile(inputFiles.validManifest, function(err, manifestInfo){
         should.not.exist(err);
         should.exist(manifestInfo);
         manifestInfo.should.have.property('content');
@@ -76,7 +84,7 @@ describe('Manifest Tools', function () {
 
   describe('writeToFile()', function () {
     it('Should return an Error if manifest info is undefined', function (done) {
-      tools.writeToFile(undefined, outputFiles.invalidManifestPath, function (err){
+      manifestTools.writeToFile(undefined, outputFiles.invalidManifestPath, function (err){
         should.exist(err);
         err.should.have.property('message', 'Manifest content is empty or invalid.');
         done();
@@ -84,7 +92,7 @@ describe('Manifest Tools', function () {
     });
 
     it('Should return an Error if content property is undefined', function (done) {
-      tools.writeToFile({ key: 'value' }, outputFiles.invalidManifestPath, function (err){
+      manifestTools.writeToFile({ key: 'value' }, outputFiles.invalidManifestPath, function (err){
         should.exist(err);
         err.should.have.property('message', 'Manifest content is empty or invalid.');
         done();
@@ -92,14 +100,14 @@ describe('Manifest Tools', function () {
     });
 
     it('Should return an Error if an error occurs while writing the file', function(done) {
-      tools.writeToFile({ content: { 'start_url': 'url' } }, outputFiles.invalidManifestPath, function(err){
+      manifestTools.writeToFile({ content: { 'start_url': 'url' } }, outputFiles.invalidManifestPath, function(err){
         should.exist(err);
         done();
       });
     });
 
     it('Should write only the manifest information object content in file', function(done) {
-      tools.writeToFile({ content: { 'start_url': 'url' } }, outputFiles.validManifestPath, function(err){
+      manifestTools.writeToFile({ content: { 'start_url': 'url' } }, outputFiles.validManifestPath, function(err){
         should.not.exist(err);
         done();
       });
@@ -130,7 +138,7 @@ describe('Manifest Tools', function () {
         should.fail('This function should not be called in this test');
       };
 
-      tools.fetchManifestUrlFromSite('invalid url', function(err) {
+      manifestTools.fetchManifestUrlFromSite('invalid url', function(err) {
         should.exist(err);
         err.should.have.property('message', 'Failed to retrieve manifest from site.');
         done();
@@ -143,7 +151,7 @@ describe('Manifest Tools', function () {
         res.end();
       };
 
-      tools.fetchManifestUrlFromSite('http://localhost:8042/notfound', function(err) {
+      manifestTools.fetchManifestUrlFromSite('http://localhost:8042/notfound', function(err) {
         should.exist(err);
         err.should.have.property('message', 'Failed to retrieve manifest from site.');
         done();
@@ -163,7 +171,7 @@ describe('Manifest Tools', function () {
                 '</html>');
       };
 
-      tools.fetchManifestUrlFromSite('http://localhost:8042/urlWithoutManifestTag', function(err, manifestUrl) {
+      manifestTools.fetchManifestUrlFromSite('http://localhost:8042/urlWithoutManifestTag', function(err, manifestUrl) {
         should.not.exist(err);
         should.not.exist(manifestUrl);
         done();
@@ -184,7 +192,7 @@ describe('Manifest Tools', function () {
                 '</html>');
       };
 
-      tools.fetchManifestUrlFromSite('http://localhost:8042/urlWithManifestTag', function(err, manifestUrl) {
+      manifestTools.fetchManifestUrlFromSite('http://localhost:8042/urlWithManifestTag', function(err, manifestUrl) {
         should.not.exist(err);
         should.exist(manifestUrl);
         manifestUrl.should.be.equal('http://localhost:8042/manifest.json');
@@ -206,7 +214,7 @@ describe('Manifest Tools', function () {
         '</html>');
       };
 
-      tools.fetchManifestUrlFromSite('http://localhost:8042/urlWithManifestTag', function(err, manifestUrl) {
+      manifestTools.fetchManifestUrlFromSite('http://localhost:8042/urlWithManifestTag', function(err, manifestUrl) {
         should.not.exist(err);
         should.exist(manifestUrl);
         manifestUrl.should.be.equal('http://localhost:8042/manifest.json');
@@ -228,7 +236,7 @@ describe('Manifest Tools', function () {
                 '</html>');
       };
 
-      tools.fetchManifestUrlFromSite('http://localhost:8042/urlWithManifestTag', function(err, manifestUrl) {
+      manifestTools.fetchManifestUrlFromSite('http://localhost:8042/urlWithManifestTag', function(err, manifestUrl) {
         should.not.exist(err);
         should.exist(manifestUrl);
         manifestUrl.should.be.equal('http://www.contoso.com/manifest.json');
@@ -255,7 +263,7 @@ describe('Manifest Tools', function () {
         should.fail('This function should not be called in this test');
       };
 
-      tools.downloadManifestFromUrl('invalid url', function(err) {
+      manifestTools.downloadManifestFromUrl('invalid url', function(err) {
         should.exist(err);
         err.should.have.property('message', 'Failed to download manifest data.');
         done();
@@ -268,7 +276,7 @@ describe('Manifest Tools', function () {
         res.end();
       };
 
-      tools.downloadManifestFromUrl('http://localhost:8042/notfound', function(err) {
+      manifestTools.downloadManifestFromUrl('http://localhost:8042/notfound', function(err) {
         should.exist(err);
         err.should.have.property('message', 'Failed to download manifest data.');
         done();
@@ -282,7 +290,7 @@ describe('Manifest Tools', function () {
         res.end('invalid json');
       };
 
-      tools.downloadManifestFromUrl('http://localhost:8042/invalidJson', function(err) {
+      manifestTools.downloadManifestFromUrl('http://localhost:8042/invalidJson', function(err) {
         should.exist(err);
         err.should.have.property('message', 'Invalid manifest format.');
         done();
@@ -296,7 +304,7 @@ describe('Manifest Tools', function () {
         res.end(JSON.stringify({'start_url': 'http://www.contoso.com/'}));
       };
 
-      tools.downloadManifestFromUrl('http://localhost:8042/validManifest.json', function(err, manifestInfo) {
+      manifestTools.downloadManifestFromUrl('http://localhost:8042/validManifest.json', function(err, manifestInfo) {
         should.not.exist(err);
         should.exist(manifestInfo);
         manifestInfo.should.have.properties('content', 'format');
@@ -323,7 +331,7 @@ describe('Manifest Tools', function () {
         should.fail('This function should not be called in this test');
       };
 
-      tools.getManifestFromSite('invalid url', function(err) {
+      manifestTools.getManifestFromSite('invalid url', function(err) {
         should.exist(err);
         err.should.have.property('message', 'Failed to retrieve manifest from site.');
         done();
@@ -336,7 +344,7 @@ describe('Manifest Tools', function () {
         res.end();
       };
 
-      tools.getManifestFromSite('http://localhost:8042/notfound', function(err) {
+      manifestTools.getManifestFromSite('http://localhost:8042/notfound', function(err) {
         should.exist(err);
         err.should.have.property('message', 'Failed to retrieve manifest from site.');
         done();
@@ -366,7 +374,7 @@ describe('Manifest Tools', function () {
         }
       };
 
-      tools.getManifestFromSite('http://localhost:8042/urlWithManifestTag', function(err, manifestInfo) {
+      manifestTools.getManifestFromSite('http://localhost:8042/urlWithManifestTag', function(err, manifestInfo) {
         should.not.exist(err);
         should.exist(manifestInfo);
         manifestInfo.should.have.properties('content', 'format');
@@ -390,7 +398,7 @@ describe('Manifest Tools', function () {
 
       var siteUrl ='http://localhost:8042/urlWithoutManifestTag';
 
-      tools.getManifestFromSite(siteUrl, function(err, manifestInfo) {
+      manifestTools.getManifestFromSite(siteUrl, function(err, manifestInfo) {
         should.not.exist(err);
         should.exist(manifestInfo);
         manifestInfo.should.have.properties('content', 'format');
@@ -410,7 +418,7 @@ describe('Manifest Tools', function () {
 
   describe('convertTo()', function () {
     it('Should return an Error if manifest info is undefined', function(done) {
-      tools.convertTo(undefined, 'W3C', function(err){
+      manifestTools.convertTo(undefined, 'W3C', function(err){
         should.exist(err);
         err.should.have.property('message', 'Manifest content is empty or not initialized.');
         done();
@@ -418,7 +426,7 @@ describe('Manifest Tools', function () {
     });
 
     it('Should return an Error if content property is undefined', function(done) {
-      tools.convertTo({ key: 'value' }, 'W3C', function(err) {
+      manifestTools.convertTo({ key: 'value' }, 'W3C', function(err) {
         should.exist(err);
         err.should.have.property('message', 'Manifest content is empty or not initialized.');
         done();
@@ -427,7 +435,7 @@ describe('Manifest Tools', function () {
 
     it('Should return the same object if the format is the same', function (done) {
       var manifestInfo = { content: { 'start_url': 'url' }, format: 'W3C' };
-      tools.convertTo(manifestInfo, 'W3C', function(err, result) {
+      manifestTools.convertTo(manifestInfo, 'W3C', function(err, result) {
         should.not.exist(err);
         result.should.be.exactly(manifestInfo);
         done();
@@ -436,7 +444,7 @@ describe('Manifest Tools', function () {
 
     it('Should use w3c as default format', function (done) {
       var manifestInfo = { content: { 'start_url': 'url' } };
-      tools.convertTo(manifestInfo, undefined, function(err, result) {
+      manifestTools.convertTo(manifestInfo, undefined, function(err, result) {
         should.not.exist(err);
         result.should.be.exactly(manifestInfo);
         result.should.have.property('format', 'w3c');
@@ -446,7 +454,7 @@ describe('Manifest Tools', function () {
 
     it('Should return an Error if input format is invalid', function(done) {
       var manifestInfo = { content: { 'start_url': 'url' }, format: 'invalid format' };
-      tools.convertTo(manifestInfo, 'W3C', function(err) {
+      manifestTools.convertTo(manifestInfo, 'W3C', function(err) {
         should.exist(err);
         err.should.have.property('message', 'Manifest format is not recognized.');
         done();
@@ -455,63 +463,9 @@ describe('Manifest Tools', function () {
 
     it('Should return an Error if output format is invalid', function(done) {
       var manifestInfo = { content: { 'start_url': 'url' }, format: 'W3C' };
-      tools.convertTo(manifestInfo, 'invalid format', function(err) {
+      manifestTools.convertTo(manifestInfo, 'invalid format', function(err) {
         should.exist(err);
         err.should.have.property('message', 'Manifest format is not recognized.');
-        done();
-      });
-    });
-
-    it('Should return an Error if custom format convert return an error', function(done) {
-      var manifestInfo = { content: { 'name': 'test' }, format: 'W3C' };
-      tools.convertTo(manifestInfo, 'chromeOS', function(err) {
-        should.exist(err);
-        err.should.have.property('message', 'Start url is required.');
-        done();
-      });
-    });
-
-    it('Convert from W3C to chromeOS', function (done) {
-      var manifestInfo = {
-        content: {
-          'name': 'Google Mail',
-          'short_name': 'GMail',
-          'start_url': 'http://mail.google.com/mail/',
-          'icons': [{
-            'src': 'icon_64.png',
-            'sizes': '64x64'
-          }, {
-            'src': 'icon_128.png',
-            'sizes': '128x128'
-          }],
-          'orientation' : 'landscape',
-          'display': 'fullscreen'
-        },
-        format: 'w3c'
-      };
-
-      var expectedManifestInfo = {
-        content: {
-          'name': 'Google Mail',
-          'version': '0.0.1',
-          'app': {
-            // 'urls': [ 'http://mail.google.com/mail/' ],
-            'launch': {
-              'web_url': 'http://mail.google.com/mail/'
-            }
-          },
-          'icons': {
-            '64': 'icon_64.png',
-            '128': 'icon_128.png'
-          },
-          'manifest_version': 2
-        },
-        format: 'chromeos'
-      };
-
-      tools.convertTo(manifestInfo, 'chromeOS', function(err, result) {
-        should.not.exist(err);
-        result.should.be.eql(expectedManifestInfo);
         done();
       });
     });
@@ -555,7 +509,7 @@ describe('Manifest Tools', function () {
         format: 'w3c'
       };
 
-      tools.convertTo(manifestInfo, 'W3C', function(err, result) {
+      manifestTools.convertTo(manifestInfo, 'W3C', function(err, result) {
         should.not.exist(err);
         result.should.be.eql(expectedManifestInfo);
         done();
@@ -595,6 +549,7 @@ describe('Manifest Tools', function () {
 
 
   describe('validateManifest()', function () {
+    platformTools.configurePlatforms(platformConfig);
     it('Should validate only the general rules if no platforms are passed', function (done) {
       var manifestInfo = {
         content: {
@@ -611,18 +566,17 @@ describe('Manifest Tools', function () {
         format: 'w3c'
       };
 
-      tools.validateManifest(manifestInfo, undefined, function(){
+      manifestTools.validateManifest(manifestInfo, undefined, function(){
         done();
       });
     });
     
-    it('Issue #88', function (done) {
-      
-      tools.getManifestFromFile(inputFiles.issue88Manifest, function (err, manifestObject){
+    it('Issue #88', function (done) {      
+      manifestTools.getManifestFromFile(inputFiles.issue88Manifest, function (err, manifestObject){
         var w3cmanifest = {
           content: manifestObject,
           format: 'w3c'};
-        tools.validateAndNormalizeStartUrl ('http://thishereweb.com', w3cmanifest.content, function(err){
+        manifestTools.validateAndNormalizeStartUrl ('http://thishereweb.com', w3cmanifest.content, function(err){
           should.not.exist(err);
         done();
         });
@@ -638,7 +592,7 @@ describe('Manifest Tools', function () {
         format: 'w3c'
       };
 
-      tools.validateManifest(manifestInfo, ['ios', 'windows', 'firefox', 'chrome', 'android'], function() {
+      manifestTools.validateManifest(manifestInfo, ['test'], function() {
         done();
       });
     });
@@ -660,7 +614,7 @@ describe('Manifest Tools', function () {
         'code': validationConstants.codes.requiredValue
       };
 
-      tools.validateManifest(manifestInfo, ['ios', 'windows', 'firefox', 'chrome', 'android'], function (err, validationResults) {
+      manifestTools.validateManifest(manifestInfo, ['ios', 'windows', 'firefox', 'chrome', 'android'], function (err, validationResults) {
         should.not.exist(err);
         validationResults.should.containEql(expectedValidation);
         done();
@@ -684,7 +638,7 @@ describe('Manifest Tools', function () {
         'code': validationConstants.codes.requiredValue
       };
 
-      tools.validateManifest(manifestInfo, ['ios', 'windows', 'firefox', 'chrome', 'android'], function (err, validationResults) {
+      manifestTools.validateManifest(manifestInfo, ['ios', 'windows', 'firefox', 'chrome', 'android'], function (err, validationResults) {
         should.not.exist(err);
         validationResults.should.containEql(expectedValidation);
         done();
@@ -708,7 +662,7 @@ describe('Manifest Tools', function () {
         'code': validationConstants.codes.requiredValue
       };
 
-      tools.validateManifest(manifestInfo, ['ios', 'windows', 'firefox', 'chrome', 'android'], function (err, validationResults) {
+      manifestTools.validateManifest(manifestInfo, ['ios', 'windows', 'firefox', 'chrome', 'android'], function (err, validationResults) {
         should.not.exist(err);
         validationResults.should.containEql(expectedValidation);
         done();
