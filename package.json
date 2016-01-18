@@ -50,6 +50,9 @@
     "should": "^5.0.1",
     "time-grunt": "^1.0.0"
   },
+  "scripts": {
+    "test": "mocha --debug-brk"
+  },
   "bugs": {
     "url": "https://github.com/manifoldjs/manifoldjs-lib/issues"
   },
