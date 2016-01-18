@@ -16,7 +16,7 @@ module.exports = function (grunt) {
         src: ['Gruntfile.js']
       },
       js: {
-        src: ['*.js', 'src/**/*.js']
+        src: ['*.js', 'lib/**/*.js']
       },
       test: {
         src: ['test/**/*.js']
@@ -25,7 +25,7 @@ module.exports = function (grunt) {
         options: {
           reporter: require('jshint-teamcity')
         },
-        src: ['*.js', 'src/**/*.js', 'test/**/*.js', 'Gruntfile.js']
+        src: ['*.js', 'lib/**/*.js', 'test/**/*.js', 'Gruntfile.js']
       },
     },
     mochaTest: {
@@ -42,7 +42,7 @@ module.exports = function (grunt) {
           quiet: true,
           captureFile: 'coverage.html'
         },
-        src: ['src/**/*.js']
+        src: ['lib/**/*.js']
       },
       // The travis-cov reporter will fail the tests if the
       // coverage falls below the threshold configured in package.json
@@ -50,7 +50,7 @@ module.exports = function (grunt) {
         options: {
           reporter: 'travis-cov'
         },
-        src: ['src/**/*.js']
+        src: ['lib/**/*.js']
       },
       'teamcity-test': {
         options: {

@@ -2,7 +2,7 @@
 
 var should = require('should');
 
-var utils = require('../../src/utils');
+var utils = require('../../lib/utils');
 
 describe('utils', function () {
   describe('parseJSON()', function () {

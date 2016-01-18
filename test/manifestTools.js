@@ -1,14 +1,17 @@
 'use strict';
 
-var tools = require('../src/manifestTools');
-var validationConstants = require('../srcmanifestTools/validationConstants');
-var path = require('path');
-var fs = require('fs');
+var fs = require('fs'),
+    http = require('http'),
+    path = require('path'),    
+    url = require('url');
+
 var should = require('should');
-var http = require('http');
-var url = require('url');
-var manifestTypeDetector = require('../src/manifestTools/manifestTypeDetector');
-var chromeToW3c = require('../src/platformUtils/chromeToW3c.js');
+
+var tools = require('../lib/manifestTools'),
+    validationConstants = require('../lib/constants').validation;
+    
+var manifestTypeDetector = require('../lib/manifestTools/manifestTypeDetector');
+var chromeToW3c = require('../lib/manifestTools/platformUtils/chromeToW3c.js');
 
 var responseFunction;
 
