@@ -1,14 +1,12 @@
 'use strict';
 
-var log = global.manifoldjs_logger, 
-    path = require('path');
-    
+var log = global.manifoldjs_logger;
+
+var packageTools = require('./packageTools');
+
 if (!log) {
   log = require('loglevel');
   
-  var appPath = path.dirname(require.main.filename);
-  var app = require(path.join(appPath, 'package.json'));
-
   var maxLenSeverity = 5;
   var maxLenSource = 12;
 
@@ -20,7 +18,7 @@ if (!log) {
       message = message.replace(/\n/g, '\n' + new Array(maxLenSeverity + maxLenSource + 6).join(' '));
       
       if (methodName !== 'write') {
-        source = source || loggerName || app.name;      
+        source = source || loggerName || packageTools.getApplicationName();      
         severity = severity || methodName;
         rawMethod(
           '[' + severity + new Array(Math.max(maxLenSeverity - severity.length + 1, 0)).join(' ') + '] ' +
