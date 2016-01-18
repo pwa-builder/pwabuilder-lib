@@ -138,6 +138,28 @@ function installQueuedPackages() {
     });
 }
 
+function getApplicationName (appPath) {
+    
+  try {
+    var app;
+    if (!appPath) {
+      appPath = path.dirname(require.main.filename);
+    }
+    
+    var mainModule = path.join(appPath, 'package.json');
+    app = require(mainModule);
+    return app.name;
+  }
+  catch (err) {
+    if (err.code !== 'MODULE_NOT_FOUND') {
+      throw err;
+    }
+    
+    appPath = path.resolve(appPath, '..');
+    return getApplicationName(appPath);
+  }
+} 
+
 module.exports = {
   getPackageInformation: getPackageInformation,
   getNpmPackageInfo: getNpmPackageInfo,
@@ -145,5 +167,6 @@ module.exports = {
   checkForUpdate: checkForUpdate,
   installPackage: installPackage,
   queuePackageInstallation: queuePackageInstallation,
-  installQueuedPackages: installQueuedPackages
+  installQueuedPackages: installQueuedPackages,
+  getApplicationName: getApplicationName
 };
