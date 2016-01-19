@@ -8,7 +8,6 @@ var fs = require('fs'),
 var should = require('should');
 
 var manifestTools = require('../lib/manifestTools'),
-    platformTools = require('../lib/platformTools'),
     validationConstants = require('../lib/constants').validation;
     
 var manifestTypeDetector = require('../lib/manifestTools/manifestTypeDetector');
@@ -40,13 +39,10 @@ var outputFiles = {
   validManifestPath: path.join(assetsDirectory, 'output-manifest.json')
 };
 
-var platformConfig = {
-    'test': {
-        'packageName': path.join(__dirname, 'assets', 'test-platform'),
-        'source': 'not used'
-    }
-};
-    
+// configure test platforms
+var platformConfig = require('../test-assets/platformConfig');
+platformConfig();
+
 describe('Manifest Tools', function () {
   describe('getManifestFromFile()', function () {
     it('Should return an Error if path is invalid', function (done) {
@@ -547,9 +543,7 @@ describe('Manifest Tools', function () {
     });
   });
 
-
   describe('validateManifest()', function () {
-    platformTools.configurePlatforms(platformConfig);
     it('Should validate only the general rules if no platforms are passed', function (done) {
       var manifestInfo = {
         content: {

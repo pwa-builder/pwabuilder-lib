@@ -4,19 +4,12 @@ var validation = require('../../../lib/manifestTools/validationRules/apiAccessRu
 var validationConstants = require('../../../lib/constants').validation;
 var should = require('should');
 
-var platformsConfig = {
-  'ios': {},
-  'android': {},
-  'firefox': {},
-  'chrome': {},
-  'windows': {},
-  'windows10': {},
-  'web': {}  
-};
+// configure test platforms
+var platformConfig = require('../../../test-assets/platformConfig');
+platformConfig();
 
 describe('Validation - All', function () {
   describe('apiAccessRulesValid', function () {
-    require('../../../lib/platformTools').configurePlatforms(platformsConfig);
     it('Should return error if platforms are not supported', function(done) {
       validation({ mjs_api_access: [ { platform : 'invalidplatform' } ] }, function(err, error) {
         should.not.exist(err);
