@@ -586,7 +586,7 @@ describe('Manifest Tools', function () {
         format: 'w3c'
       };
 
-      manifestTools.validateManifest(manifestInfo, ['test'], function() {
+      manifestTools.validateManifest(manifestInfo, ['ios', 'windows', 'firefox', 'chrome', 'android'], function() {
         done();
       });
     });
@@ -608,7 +608,7 @@ describe('Manifest Tools', function () {
         'code': validationConstants.codes.requiredValue
       };
 
-      manifestTools.validateManifest(manifestInfo, ['test'], function (err, validationResults) {
+      manifestTools.validateManifest(manifestInfo, ['ios', 'windows', 'firefox', 'chrome', 'android'], function (err, validationResults) {
         should.not.exist(err);
         validationResults.should.containEql(expectedValidation);
         done();
@@ -632,7 +632,7 @@ describe('Manifest Tools', function () {
         'code': validationConstants.codes.requiredValue
       };
 
-      manifestTools.validateManifest(manifestInfo, ['test'], function (err, validationResults) {
+      manifestTools.validateManifest(manifestInfo, ['ios', 'windows', 'firefox', 'chrome', 'android'], function (err, validationResults) {
         should.not.exist(err);
         validationResults.should.containEql(expectedValidation);
         done();
@@ -656,7 +656,7 @@ describe('Manifest Tools', function () {
         'code': validationConstants.codes.requiredValue
       };
 
-      manifestTools.validateManifest(manifestInfo, ['test'], function (err, validationResults) {
+      manifestTools.validateManifest(manifestInfo, ['ios', 'windows', 'firefox', 'chrome', 'android'], function (err, validationResults) {
         should.not.exist(err);
         validationResults.should.containEql(expectedValidation);
         done();
