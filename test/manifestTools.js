@@ -11,7 +11,6 @@ var manifestTools = require('../lib/manifestTools'),
     validationConstants = require('../lib/constants').validation;
     
 var manifestTypeDetector = require('../lib/manifestTools/manifestTypeDetector');
-var chromeToW3c = require('../lib/manifestTools/platformUtils/chromeToW3c.js');
 
 var responseFunction;
 
@@ -465,6 +464,37 @@ describe('Manifest Tools', function () {
         done();
       });
     });
+  
+    it('Should convert from Chrome OS manifest format to W3C manifest format', function() {
+        var manifestInfo = {
+          content: {
+            'name': 'Sample',
+            'description': 'Chrome Web App Sample',
+            'version': '0.0.1',
+            'app': {
+                'launch': {
+                    'web_url': 'http://example.com'
+                }
+            },
+            'icons': {
+                '16': 'icon-16.png',
+                '48': 'icon-48.png',
+                '128': 'icon-128.png'
+            },
+            'permissions': [
+                'notifications',
+                'background'
+            ]
+          },
+          format: 'chromeos'          
+        };
+  
+        manifestTools.convertTo(manifestInfo, 'W3C', function(err, convertedManifest) {
+          var result = manifestTypeDetector.detect(convertedManifest.content);    
+          should.exist(result);
+          result.should.be.equal('w3c');
+        });
+    });
 
     it('Convert from chromeOS to W3C', function (done) {
       var manifestInfo = {
@@ -500,7 +530,16 @@ describe('Manifest Tools', function () {
           }, {
             'src': 'icon_128.png',
             'sizes': '128x128'
-          }]
+          }],
+          mjs_api_access: [
+            {'match': 'http://mail.google.com/mail/*', 'platform': 'chrome', 'access': 'unlimitedStorage, notifications' },
+            {'match': '*://mail.google.com/mail/*', 'platform': 'chrome', 'access': 'unlimitedStorage, notifications' },
+            {'match': '*://www.google.com/mail/*', 'platform': 'chrome', 'access': 'unlimitedStorage, notifications' }
+          ],
+          mjs_extended_scope: [
+            '*://mail.google.com/mail/*',
+            '*://www.google.com/mail/*'
+          ]
         },
         format: 'w3c'
       };
@@ -510,36 +549,6 @@ describe('Manifest Tools', function () {
         result.should.be.eql(expectedManifestInfo);
         done();
       });
-    });
-  });
-  
-  describe('chromeToW3c()', function () {
-    it('Should convert from Chrome OS manifest format to W3C manifest format', function() {
-        var manifestObj = {
-            'name': 'Sample',
-            'description': 'Chrome Web App Sample',
-            'version': '0.0.1',
-            'app': {
-                'launch': {
-                    'web_url': 'http://example.com'
-                }
-            },
-            'icons': {
-                '16': 'icon-16.png',
-                '48': 'icon-48.png',
-                '128': 'icon-128.png'
-            },
-            'permissions': [
-                'notifications',
-                'background'
-            ]
-        };
-  
-        manifestObj = chromeToW3c.chromeToW3CManifest(manifestObj);
-        var result = manifestTypeDetector.detect(manifestObj);
-  
-        should.exist(result);
-        result.should.be.equal('w3c');
     });
   });
 
