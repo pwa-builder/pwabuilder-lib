@@ -5,7 +5,7 @@ var fs = require('fs'),
 
 require('should');
 
-var validation = require('../../lib/manifestTools/validation');
+var validation = require('../../lib/manifestTools/manifestValidator');
 
 var validationRulesPath = path.join(__dirname, '..', '..', 'lib', 'manifestTools', 'validationRules');
 

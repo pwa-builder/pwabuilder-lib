@@ -1,6 +1,6 @@
 'use strict';
 
-var transformations = require('../../lib/manifestTools/transformations');
+var transformations = require('../../lib/manifestTools/manifestTransformations');
 var path = require('path');
 var fs = require('fs');
 require('should');
