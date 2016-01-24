@@ -1,6 +1,7 @@
 'use strict';
 
 module.exports = {
+  ProgressIndicator: require('./lib/progress'),
   PlatformBase: require('./lib/platformBase'),
   CustomError: require('./lib/customError'),
   constants: require('./lib/constants'),
