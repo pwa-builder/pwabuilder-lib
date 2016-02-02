@@ -1,4 +1,4 @@
-ManifoldJS
+manifoldjs-lib
 
 Copyright (c) Microsoft Corporation
 
