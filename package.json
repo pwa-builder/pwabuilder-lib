@@ -1,7 +1,7 @@
 {
   "name": "manifoldjs-lib",
-  "version": "0.0.1",
-  "description": "Manifoldjs Core Libraries",
+  "version": "0.1.0",
+  "description": "ManifoldJS Core Library",
   "repository": {
     "type": "git",
     "url": "https://github.com/manifoldjs/manifoldjs-lib.git"
