@@ -214,7 +214,7 @@ describe('utils', function () {
       var inputValue = '111.222.333';
       var result = utils.sanitizeName(inputValue);
       /*jshint -W030 */
-      result.should.be.exactly('MyManifoldJSApp');
+      result.should.be.exactly('myManifoldJSApp');
     });    
   });
 });
