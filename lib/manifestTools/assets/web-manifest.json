@@ -41,6 +41,33 @@
     "theme_color": {
       "description": "background color for splash screen and icons",
       "type": "string"
+    },
+    "dir": {
+      "description": "Specifies the base direction for the directionality-capable members of the manifest (the directionality-capable members are: description, name, short_name).",
+      "enum": [ "ltr", "rtl", "auto" ]
+    },
+    "lang": {
+      "description": "A language tag (string) that specifies the primary language for the values of the manifest's directionality-capable members.",
+      "type": "string"
+    },
+    "description": {
+      "description": "A string that allows the developer to describe the purpose of the web application.",
+      "type": "string"
+    },
+    "background_color": {
+      "description": "A string describing the expected background color of the web application.",
+      "type": "string"
+    },
+    "related_applications": {
+      "description": "The related_applications member is an array of applications objects that lists related applications and serves as an indication of such a relationship between web application and related applications.",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/application"
+      }
+    },
+    "prefer_related_applications": {
+      "description": "A boolean value that is used as a hint for the user agent to say that related applications should be preferred over the web application.",
+      "type": "boolean"
     }
     
   },
@@ -49,11 +76,6 @@
     "icon": {
       "type": "object",
       "properties": {
-        "density": {
-          "description": "The density member of an icon is the device pixel density for which this icon was designed.",
-          "type": [ "number", "string" ],
-          "default":  [ 1.0, "1.0" ]
-        },
         "sizes": {
           "description": "The sizes member is a string consisting of an unordered set of unique space-separated tokens which are ASCII case-insensitive that represents the dimensions of an icon for visual media.",
           "oneOf": [
@@ -75,6 +97,24 @@
           "description": "The type member of an icon is a hint as to the media type of the icon.",
           "type": "string",
           "pattern": "^[\\sa-z0-9\\-+;\\.=\\/]+$"
+        }
+      }
+    },
+    "application": {
+      "type": "object",
+      "properties": {
+        "platform": {
+          "description": "The description member of an application is a string that represents the platform on which the application can be found.",
+          "type": "string"
+        },
+        "url": {
+          "description": "The url member of an application represents the URL at which the application can be found.",
+          "type": "string",
+          "format": "uri"
+        },
+        "id": {
+          "description": "The id member of an application is a string that represents the id which is used to represent the application on the platform.",
+          "type": "string"
         }
       }
     }
