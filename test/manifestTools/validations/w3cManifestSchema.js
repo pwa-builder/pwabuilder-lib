@@ -52,6 +52,68 @@ describe('Validation - All', function () {
       });
     });
 
+    it('Should return errors for icon objects with invalid properties', function(done) {
+
+      var manifestObj = {
+          'name': 'Sample App',
+          'description': 'Web App Sample',
+          'short_name': 'Sample',
+          'icons': [
+            {
+              'sizes': 'any',
+              'unknownMember': 'testValue'
+            },
+            {
+              'sizes': 'any',
+              'type': false
+            }
+          ]    
+      };
+
+      validation(manifestObj, function(err, error) {
+        should.not.exist(err);
+        error.should.have.length(2);
+        error[0].should.have.property('platform', validationConstants.platforms.all);
+        error[0].should.have.property('level', validationConstants.levels.error);
+        error[0].should.have.property('member', '/icons/1/type');
+        error[1].should.have.property('platform', validationConstants.platforms.all);
+        error[1].should.have.property('level', validationConstants.levels.warning);
+        error[1].should.have.property('member', '/icons/0/unknownMember');
+        done();
+      });
+    });
+
+    it('Should return errors for application objects with invalid properties', function(done) {
+
+      var manifestObj = {
+          'name': 'Sample App',
+          'description': 'Web App Sample',
+          'short_name': 'Sample',
+          'related_applications': [
+            {
+              'platform': 'android',
+              'unknownMember': 'testValue'
+            },
+            {
+              'platform': 'ios',
+              'id': false
+            }
+          ]         
+      };
+
+      validation(manifestObj, function(err, error) {
+        should.not.exist(err);
+        error.should.have.length(2);
+        error[0].should.have.property('platform', validationConstants.platforms.all);
+        error[0].should.have.property('level', validationConstants.levels.error);
+        error[0].should.have.property('member', '/related_applications/1/id');
+        error[1].should.have.property('platform', validationConstants.platforms.all);
+        error[1].should.have.property('level', validationConstants.levels.warning);
+        error[1].should.have.property('member', '/related_applications/0/unknownMember');
+        done();
+      });
+    });
+
     it('Should not return errors if manifest schema is valid', function(done) {
 
       var manifestObj = {
@@ -61,6 +123,22 @@ describe('Validation - All', function () {
           'start_url': 'http://www.test.com',
           'orientation': 'any',
           'display': 'fullscreen',
+          'icons': [
+            {
+              'sizes': 'any',
+              'src': '/resources/icon.png'
+            }
+          ],
+          'related_applications': [
+            {
+              'platform': 'android',
+              'id': 'test-app'
+            },
+            {
+              'platform': 'ios',
+              'id': 'test-app'
+            }
+          ],
           'prefer_related_applications': false,
           'dir': 'ltr'
       };
