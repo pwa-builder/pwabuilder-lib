@@ -62,7 +62,7 @@ describe('Manifest Tools', function () {
     it('Should return an Error if manifest format is invalid', function (done) {
       manifestTools.getManifestFromFile(inputFiles.invalidManifestFormat, function (err){
         should.exist(err);
-        err.should.have.property('message', 'Invalid manifest format.');
+        err.should.have.property('message', 'Unable to detect the input manifest format. Try specifying the correct format using the -f <format> option. Available formats are: w3c, chromeos, edgeextension.');
         done();
       });
     });
