@@ -212,4 +212,33 @@ describe('Manifestation tool', function () {
       done();
     });    
   });
+
+  it('Should create default manifest even when server returns 500', function(done) {
+    responseFunction = function(req, res) {
+      res.writeHead(500, { 'Content-Type': 'text/html' });
+
+      res.end('Internal error');
+    };
+
+    manifestCreator({ url: 'http://localhost:8042/home' }, function (err, manifest) {
+      should.not.exist(err);
+      should.exist(manifest);
+      done();
+    });
+  });
+
+  it('Should get an error when calling invalid URL', function(done) {
+    responseFunction = function(req, res) {
+      res.writeHead(500, { 'Content-Type': 'text/html' });
+
+      res.end('Internal error');
+    };
+
+    manifestCreator({ url: 'http://localInvalidHost:9999/' }, function (err, manifest) {
+      should.exist(err);
+      err.should.have.property('code', 'ENOTFOUND');
+      should.not.exist(manifest);
+      done();
+    });
+  }); 
 });
