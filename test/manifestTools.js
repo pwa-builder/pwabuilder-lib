@@ -397,7 +397,7 @@ describe('Manifest Tools', function () {
         should.not.exist(err);
         should.exist(manifestInfo);
         manifestInfo.should.have.properties('content', 'format');
-        manifestInfo.content.should.have.property('start_url', siteUrl);
+        manifestInfo.content.should.have.property('start_url', '/urlWithoutManifestTag');
         done();
       });
     });
