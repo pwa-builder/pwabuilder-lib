@@ -46,7 +46,7 @@ describe('Manifestation tool', function () {
       manifest.should.have.property('theme_color', 'transparent');
       done();
     });
-  });  
+  });
 
   it('Should get manifest from HTML with arabic body (no lang recognition)', function(done) {
     responseFunction = function(req, res) {
@@ -78,7 +78,7 @@ describe('Manifestation tool', function () {
       '<html>' +
         '<head>' +
           '<title>Einige Titel</title>' +
-        '</head>' +      
+        '</head>' +
       '</html>');
     };
 
@@ -89,7 +89,7 @@ describe('Manifestation tool', function () {
       manifest.should.have.property('dir', 'ltr');
       done();
     });
-  });   
+  });
 
   it('Should get manifest from HTML with french body (using lang recognition)', function(done) {
     responseFunction = function(req, res) {
@@ -161,7 +161,7 @@ describe('Manifestation tool', function () {
       manifest.should.have.property('background_color', 'blue');
       manifest.should.have.property('description', 'this is the description for a simple test page');
       manifest.should.have.property('dir', 'ltr');
-      manifest.should.have.property('display', true);
+      manifest.should.have.property('display', 'fullscreen');
       manifest.should.have.property('lang', 'en');
       manifest.should.have.property('name', 'some app name');
       manifest.should.have.property('related_applications').with.lengthOf(1);
@@ -200,7 +200,7 @@ describe('Manifestation tool', function () {
       manifest.should.have.property('background_color', 'blue');
       manifest.should.have.property('description', 'این توضیحات برای یک صفحه آزمایشی ساده است');
       manifest.should.have.property('dir', 'rtl');
-      manifest.should.have.property('display', true);
+      manifest.should.have.property('display', 'fullscreen');
       manifest.should.have.property('lang', 'fa');
       manifest.should.have.property('name', 'some app name');
       manifest.should.have.property('related_applications').with.lengthOf(1);
@@ -210,7 +210,7 @@ describe('Manifestation tool', function () {
       manifest.should.have.property('start_url', '/home');
       manifest.should.have.property('theme_color', 'white');
       done();
-    });    
+    });
   });
 
   it('Should create default manifest even when server returns 500', function(done) {
@@ -240,5 +240,5 @@ describe('Manifestation tool', function () {
       should.not.exist(manifest);
       done();
     });
-  }); 
+  });
 });
