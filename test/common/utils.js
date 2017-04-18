@@ -131,7 +131,7 @@ describe('utils', function () {
       result.should.be.true;
     });
   });
-  
+
   describe('sanitizeName()', function () {
     it('Should not remove any character (lower case)', function () {
       var inputValue = 'abc123.def456.ghi789';
@@ -160,21 +160,21 @@ describe('utils', function () {
       /*jshint -W030 */
       result.should.be.exactly('abc');
     });
-    
+
     it('Should remove first character if it is a dot', function () {
       var inputValue = '.abc';
       var result = utils.sanitizeName(inputValue);
       /*jshint -W030 */
       result.should.be.exactly('abc');
     });
-    
+
     it('Should remove all numbers after a dot', function () {
       var inputValue = 'abc.123def';
       var result = utils.sanitizeName(inputValue);
       /*jshint -W030 */
       result.should.be.exactly('abc.def');
     });
-    
+
     it('Should remove numbers and dots at the beginning', function () {
       var inputValue = '123.abc';
       var result = utils.sanitizeName(inputValue);
@@ -188,14 +188,14 @@ describe('utils', function () {
       /*jshint -W030 */
       result.should.be.exactly('abc');
     });
-    
+
     it('Should remove numbers and dots at the end (scenario 2)', function () {
       var inputValue = 'abc.123.456';
       var result = utils.sanitizeName(inputValue);
       /*jshint -W030 */
       result.should.be.exactly('abc');
     });
-    
+
     it('Should remove "inner" segment if it contains only numbers', function () {
       var inputValue = 'abc.123.def';
       var result = utils.sanitizeName(inputValue);
@@ -209,12 +209,12 @@ describe('utils', function () {
       /*jshint -W030 */
       result.should.be.exactly('abc');
     });
-    
+
     it('Should retrieve default name if sanitization removes all characters', function () {
       var inputValue = '111.222.333';
       var result = utils.sanitizeName(inputValue);
       /*jshint -W030 */
-      result.should.be.exactly('myManifoldJSApp');
-    });    
+      result.should.be.exactly('myPWABuilderApp');
+    });
   });
 });
