@@ -15,5 +15,6 @@ module.exports = {
   processTools: require('./lib/processTools'),
   fileTools: require('./lib/fileTools'),
   iconTools: require('./lib/iconTools'),
-  log: require('./lib/log')
+  log: require('./lib/log'),
+  serviceWorkerTools: require('./lib/serviceWorkerTools')
 };

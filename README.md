@@ -1,18 +1,18 @@
-# manifoldjs-lib 
+# pwabuilder-lib
 
-## ManifoldJS Core Library
+## PWA Builder Core Library
 
-The library contains the core modules required by [ManifoldJS](https://github.com/manifoldjs/ManifoldJS), a tool for creating hosted web applications based on a [W3C Web App manifest](http://www.w3.org/TR/appmanifest/).
+The library contains the core modules required by [PWA Builder](https://github.com/manifoldjs/ManifoldJS), a tool for creating hosted web applications based on a [W3C Web App manifest](http://www.w3.org/TR/appmanifest/).
 
 ## Installation
 
 ```
-npm install manifoldjs-lib
+npm install pwabuilder-lib
 ```
 In node.js:
 
 ```
-var lib = require('manifoldjs-lib')
+var lib = require('pwabuilder-lib')
 ```
 
 ## Documentation
@@ -20,7 +20,7 @@ To get started, visit our [wiki](https://github.com/manifoldjs/ManifoldJS/wiki).
 
 ## License
 
-> manifoldjs-lib
+> pwabuilder-lib
 
 > Copyright (c) Microsoft Corporation
 
