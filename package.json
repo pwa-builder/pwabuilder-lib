@@ -1,7 +1,7 @@
 {
-  "name": "manifoldjs-lib",
-  "version": "1.0.1",
-  "description": "ManifoldJS Core Library",
+  "name": "pwabuilder-lib",
+  "version": "2.0.0",
+  "description": "PWA Builder Core Library",
   "repository": {
     "type": "git",
     "url": "https://github.com/manifoldjs/manifoldjs-lib.git"
@@ -30,15 +30,30 @@
     "ManifoldJS"
   ],
   "dependencies": {
+    "adm-zip": "^0.4.7",
     "ansi": "^0.3.1",
-    "cheerio": "^0.19.0",
+    "async": "^1.5.2",
+    "cheerio": "^0.20.0",
+    "eslint-config-hapi": "^9.1.0",
+    "expect": "^1.20.1",
+    "file-type": "^3.8.0",
+    "image-size": "^0.5.0",
+    "image-type": "^2.1.0",
+    "jimp": "^0.2.24",
+    "langdetect": "^0.2.1",
+    "lodash": "^4.13.1",
     "loglevel": "^1.4.0",
+    "mime-types": "^2.1.11",
     "mkdirp": "^0.5.1",
     "ncp": "^2.0.0",
     "q": "^1.4.1",
     "request": "^2.67.0",
     "semver": "^5.1.0",
-    "tv4": "^1.2.7"
+    "strip-combining-marks": "^0.1.0",
+    "tld-extract": "^1.0.1",
+    "tv4": "^1.2.7",
+    "valid-url": "^1.0.9",
+    "xregexp": "^3.1.1"
   },
   "devDependencies": {
     "blanket": "1.1.6",

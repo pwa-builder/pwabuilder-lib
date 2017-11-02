@@ -1,8 +1,8 @@
 {
   "name": "test-platform",
   "version": "1.0.0",
-  "description": "ManifoldJS Test Platform",
+  "description": "PWA Builder Test Platform",
   "main": "index.js",
-  "author": "ManifoldJS",
+  "author": "PWA Buider",
   "license": "ISC"
 }

@@ -2,14 +2,14 @@
 
 var fs = require('fs'),
     http = require('http'),
-    path = require('path'),    
+    path = require('path'),
     url = require('url');
 
 var should = require('should');
 
 var manifestTools = require('../lib/manifestTools'),
     validationConstants = require('../lib/constants').validation;
-    
+
 var manifestTypeDetector = require('../lib/manifestTools/manifestTypeDetector');
 
 var responseFunction;
@@ -397,7 +397,7 @@ describe('Manifest Tools', function () {
         should.not.exist(err);
         should.exist(manifestInfo);
         manifestInfo.should.have.properties('content', 'format');
-        manifestInfo.content.should.have.property('start_url', siteUrl);
+        manifestInfo.content.should.have.property('start_url', '/urlWithoutManifestTag');
         done();
       });
     });
@@ -464,7 +464,7 @@ describe('Manifest Tools', function () {
         done();
       });
     });
-  
+
     it('Should convert from Chrome OS manifest format to W3C manifest format', function() {
         var manifestInfo = {
           content: {
@@ -486,11 +486,11 @@ describe('Manifest Tools', function () {
                 'background'
             ]
           },
-          format: 'chromeos'          
+          format: 'chromeos'
         };
-  
+
         manifestTools.convertTo(manifestInfo, 'W3C', function(err, convertedManifest) {
-          var result = manifestTypeDetector.detect(convertedManifest.content);    
+          var result = manifestTypeDetector.detect(convertedManifest.content);
           should.exist(result);
           result.should.be.equal('w3c');
         });
@@ -573,8 +573,8 @@ describe('Manifest Tools', function () {
         done();
       });
     });
-    
-    it('Issue #88', function (done) {      
+
+    it('Issue #88', function (done) {
       manifestTools.getManifestFromFile(inputFiles.issue88Manifest, function (err, manifestObject){
         var w3cmanifest = {
           content: manifestObject,
@@ -638,30 +638,6 @@ describe('Manifest Tools', function () {
         'platform': validationConstants.platforms.all,
         'level': validationConstants.levels.error,
         'member': validationConstants.manifestMembers.start_url,
-        'code': validationConstants.codes.requiredValue
-      };
-
-      manifestTools.validateManifest(manifestInfo, ['ios', 'windows', 'firefox', 'chrome', 'android'], function (err, validationResults) {
-        should.not.exist(err);
-        validationResults.should.containEql(expectedValidation);
-        done();
-      });
-    });
-
-    it('Should recommend to specify scope rules', function (done) {
-      var manifestInfo = {
-        content: {
-          'short_name': 'MyApp',
-          'start_url': 'http://example.com/'
-        },
-        format: 'w3c'
-      };
-
-      var expectedValidation = {
-        'description': 'It is recommended to specify a set of rules that represent the navigation scope of the application',
-        'platform': validationConstants.platforms.all,
-        'level': validationConstants.levels.suggestion,
-        'member': validationConstants.manifestMembers.mjs_extended_scope,
         'code': validationConstants.codes.requiredValue
       };
 
