@@ -1,6 +1,6 @@
 {
   "name": "pwabuilder-lib",
-  "version": "2.0.1-RC.0",
+  "version": "2.0.2-RC.0",
   "description": "PWA Builder Core Library",
   "repository": {
     "type": "git",
