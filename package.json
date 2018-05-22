@@ -1,6 +1,6 @@
 {
   "name": "pwabuilder-lib",
-  "version": "2.0.1-beta.3",
+  "version": "2.0.1-RC.0",
   "description": "PWA Builder Core Library",
   "repository": {
     "type": "git",
@@ -46,6 +46,7 @@
     "mime-types": "^2.1.11",
     "mkdirp": "^0.5.1",
     "ncp": "^2.0.0",
+    "pwabuilder-serviceworkers": "^1.0.1",
     "q": "^1.4.1",
     "request": "^2.67.0",
     "semver": "^5.1.0",
