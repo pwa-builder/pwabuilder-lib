@@ -39,7 +39,7 @@
       "format": "uri"
     },
     "theme_color": {
-      "description": "background color for splash screen and icons",
+      "description": "The default theme color for the browsing contexts of an application",
       "type": "string"
     },
     "dir": {
@@ -68,8 +68,29 @@
     "prefer_related_applications": {
       "description": "A boolean value that is used as a hint for the user agent to say that related applications should be preferred over the web application.",
       "type": "boolean"
+    },
+    "categories": {
+      "description": "An array of strings defining the expected application categories to which the web application belongs. While any string is considered valid, W3C maintains a list of known category strings at https://github.com/w3c/manifest/wiki/Categories",
+      "type": "array"
+    },
+    "screenshots": {
+      "description": "An array of images representing the application in common usage scenarios.",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/icon"
+      }
+    },
+    "iarc_rating_id": {
+      "description": "The International Age Rating Coalition (IARC) certification code of the web application. It is intended to be used to determine which ages the web application is appropriate for.",
+      "type": "string"
+    },
+    "shortcuts": {
+      "description": "An array of shortcut items that provide access to key tasks within a web application.",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/shortcutItem"
+      }
     }
-    
   },
 
   "definitions": {
@@ -97,6 +118,15 @@
           "description": "The type member of an icon is a hint as to the media type of the icon.",
           "type": "string",
           "pattern": "^[\\sa-z0-9\\-+;\\.=\\/]+$"
+        },
+        "purpose": {
+          "description": "An unordered set of unique space-separated tokens that are ASCII case-insensitive. The allowed values are the icon purposes.",
+          "type": "string",
+          "enum": [ "badge", "maskable", "any" ]
+        },
+        "platform": {
+          "description": "The platform to which a containing object applies.",
+          "type": "string"
         }
       }
     },
@@ -117,6 +147,35 @@
           "type": "string"
         }
       }
-    }
+    },
+    "shortcutItem": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "The name of the shortcut as it is usually displayed to the user in a context menu.",
+          "type": "string"
+        },
+        "short_name": {
+          "description": "A short version of the name of the shortcut. It is intended to be used where there is insufficient space to display the full name of the shortcut.",
+          "type": "string"
+        },
+        "description": {
+          "description": "Describes the purpose of the shortcut. User agents MAY expose this information to assistive technology",
+          "type": "string"
+        },
+        "url": {
+          "description": "The URL within the application's scope that opens when the associated shortcut is activated.",
+          "type": "string",
+          "format": "uri"
+        },
+        "icons": {
+          "description": "The images to serve as iconic representations of the shortcut in various contexts.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/icon"
+          }
+        }
+      }
+    },
   }
 }
